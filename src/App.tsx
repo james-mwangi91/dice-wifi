@@ -11,10 +11,13 @@ import FAQPage from './pages/FAQPage';
 import ContactPage from './pages/ContactPage';
 import NotFound from './pages/NotFound';
 
+/* Vite base path — '/' in dev, '/dice-wifi/' on GitHub Pages */
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
+
 export default function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
+      <BrowserRouter basename={routerBasename}>
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />

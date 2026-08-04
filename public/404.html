@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>DICE WiFi — Fast. Reliable. Unlimited.</title>
     <!-- SPA fallback: GitHub Pages serves this file for unknown routes.
-         Redirect to the app root so client-side routing can take over. -->
-    <script>
-      (function () {
-        var segments = location.pathname.split('/').filter(Boolean);
-        if (segments[0] === 'dice-wifi') segments.shift();
-        location.replace('/dice-wifi/' + segments.join('/'));
-      })();
-    </script>
+         Client-side routing already runs on /dice-wifi/, so a direct
+         reload of a deep link is simply sent back to the app root. -->
+    <script>location.replace('/dice-wifi/');</script>
   </head>
   <body></body>
 </html>
