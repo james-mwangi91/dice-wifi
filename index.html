@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2563EB" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="description" content="DICE WiFi delivers lightning-fast, reliable and unlimited internet for homes and businesses across Nairobi, Kiambu, Ruiru, Thika and beyond. 99.9% uptime, 24/7 support." />
+    <meta name="keywords" content="DICE WiFi, internet provider Kenya, fibre internet Nairobi, home internet Kenya, business internet Kenya, unlimited wifi" />
+    <meta name="author" content="DICE WiFi" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="DICE WiFi" />
+    <meta property="og:title" content="DICE WiFi — Fast. Reliable. Unlimited." />
+    <meta property="og:description" content="Experience seamless streaming, gaming, remote work and business connectivity with reliable high-speed internet from DICE WiFi." />
+    <meta property="og:url" content="https://dicewifi.co.ke/" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80" />
+    <meta property="og:locale" content="en_KE" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DICE WiFi — Fast. Reliable. Unlimited." />
+    <meta name="twitter:description" content="Lightning fast internet for home & business across Nairobi and beyond." />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://images.unsplash.com" />
+
+    <!-- Prevent theme flash: apply persisted theme before paint -->
+    <script>
+      (function () {
+        var stored = localStorage.getItem('dice-theme');
+        var dark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        if (dark) document.documentElement.classList.add('dark');
+      })();
+    </script>
+
+    <!-- Structured data (schema.org) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "InternetServiceProvider",
+        "name": "DICE WiFi",
+        "slogan": "Fast. Reliable. Unlimited.",
+        "description": "Premium high-speed internet for homes and businesses in Nairobi, Kiambu, Ruiru, Thika and surrounding areas.",
+        "url": "https://dicewifi.co.ke/",
+        "logo": "https://dicewifi.co.ke/favicon.svg",
+        "telephone": "+254700000000",
+        "email": "hello@dicewifi.co.ke",
+        "priceRange": "KES 1,500 - KES 8,000/month",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Westlands",
+          "addressLocality": "Nairobi",
+          "addressCountry": "KE"
+        },
+        "areaServed": ["Nairobi", "Kiambu", "Ruiru", "Thika", "Juja", "Kahawa", "Syokimau", "Kitengela"],
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "contactType": "customer support",
+          "telephone": "+254700000000",
+          "availableLanguage": ["English", "Swahili"]
+        },
+        "offers": {
+          "@type": "AggregateOffer",
+          "lowPrice": "1500",
+          "highPrice": "8000",
+          "priceCurrency": "KES",
+          "offerCount": "4"
+        }
+      }
+    </script>
+
+    <title>DICE WiFi — Fast. Reliable. Unlimited. | Premium Internet in Nairobi</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
