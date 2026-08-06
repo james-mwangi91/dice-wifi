@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Check, Crown, X } from 'lucide-react';
 import { PACKAGES, PACKAGE_COMPARE_ROWS } from '../../constants';
 import type { Plan } from '../../types';
 import { formatKes } from '../../utils/scroll';
 import { cn } from '../../utils/cn';
+import { useScrollLock } from '../../hooks';
 import SectionHeading from '../ui/SectionHeading';
 import { Stagger, StaggerItem } from '../ui/Reveal';
 import Button from '../ui/Button';
@@ -79,20 +80,19 @@ function PlanCard({ plan }: { plan: Plan }) {
 /** Packages section with comparison modal */
 export default function Packages() {
   const [compareOpen, setCompareOpen] = useState(false);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+
+  useScrollLock(compareOpen);
 
   useEffect(() => {
+    if (!compareOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setCompareOpen(false);
     };
     window.addEventListener('keydown', onKey);
+    /* Move focus into the dialog so keyboard and screen-reader users land there */
+    closeRef.current?.focus();
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = compareOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
   }, [compareOpen]);
 
   return (
@@ -158,6 +158,7 @@ export default function Packages() {
                   <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">Everything included, side by side.</p>
                 </div>
                 <button
+                  ref={closeRef}
                   type="button"
                   onClick={() => setCompareOpen(false)}
                   aria-label="Close comparison"
@@ -200,10 +201,10 @@ export default function Packages() {
                         </td>
                         {row.values.map((v, i) => (
                           <td
-                            key={i}
+                            key={PACKAGES[i]?.id ?? i}
                             className={cn(
                               'border-b border-slate-900/5 px-4 py-3.5 text-center text-xs',
-                              PACKAGES[i].featured ? 'font-bold text-brand-primary dark:text-brand-accent' : 'text-slate-500 dark:text-slate-400'
+                              PACKAGES[i]?.featured ? 'font-bold text-brand-primary dark:text-brand-accent' : 'text-slate-500 dark:text-slate-400'
                             )}
                           >
                             {v}

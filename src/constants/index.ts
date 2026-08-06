@@ -15,11 +15,7 @@ import {
   Lock,
   Activity,
   Gauge,
-  HeartHandshake,
-  Target,
-  Eye,
   Cpu,
-  type LucideIcon,
 } from 'lucide-react';
 import type {
   NavLink,
@@ -447,9 +443,11 @@ export const FAQS: FaqItem[] = [
 /* Socials                                                             */
 /* ------------------------------------------------------------------ */
 
-export const SOCIALS: { label: string; href: string; icon: LucideIcon }[] = [
-  { label: 'Facebook', href: 'https://facebook.com', icon: HeartHandshake },
-  { label: 'Instagram', href: 'https://instagram.com', icon: Target },
-  { label: 'Twitter / X', href: 'https://x.com', icon: Eye },
-  { label: 'LinkedIn', href: 'https://linkedin.com', icon: Briefcase },
-];
+/* ------------------------------------------------------------------ */
+/* Socials                                                             */
+/* ------------------------------------------------------------------ */
+
+/* Social links live in Footer.tsx, which pairs each network with its correct
+   brand icon. The former SOCIALS constant here was unused and mapped Facebook
+   to a handshake and Twitter to an eye, so it has been removed. */
+

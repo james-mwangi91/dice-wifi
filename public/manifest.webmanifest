@@ -2,9 +2,9 @@
   "name": "DICE WiFi — Fast. Reliable. Unlimited.",
   "short_name": "DICE WiFi",
   "description": "Lightning fast, unlimited internet for homes and businesses across Nairobi and beyond.",
-  "id": "/",
-  "start_url": "/",
-  "scope": "/",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0F172A",
@@ -13,13 +13,13 @@
   "categories": ["utilities", "lifestyle"],
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "./favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/favicon.svg",
+      "src": "./favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"

@@ -1,11 +1,11 @@
-import { useEffect, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { NAV_LINKS } from '../../constants';
 import { cn } from '../../utils/cn';
-import { scrollToId } from '../../utils/scroll';
-import { useScrolled } from '../../hooks';
+import { navigateToSection } from '../../utils/scroll';
+import { useScrolled, useScrollLock } from '../../hooks';
 import { LogoWordmark } from '../Logo';
 import ThemeToggle from '../misc/ThemeToggle';
 import Button from '../ui/Button';
@@ -17,42 +17,106 @@ export default function Navbar() {
   const [active, setActive] = useState('');
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const drawerRef = useRef<HTMLElement | null>(null);
+  const closeRef = useRef<HTMLButtonElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
 
   /* Scrollspy — highlight the section currently in view */
   useEffect(() => {
-    if (pathname !== '/') return;
-    const ids = NAV_LINKS.map((l) => l.href);
+    if (pathname !== '/') {
+      setActive('');
+      return;
+    }
+
+    const sections = NAV_LINKS.map((l) => document.getElementById(l.href)).filter(
+      (el): el is HTMLElement => el !== null
+    );
+    if (sections.length === 0) return;
+
+    /* Track every section's ratio and pick the most-visible one, rather than
+       letting whichever entry happens to fire last win the highlight. */
+    const ratios = new Map<string, number>();
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(entry.target.id);
+          ratios.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
         });
+
+        let best = '';
+        let bestRatio = 0;
+        ratios.forEach((ratio, id) => {
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            best = id;
+          }
+        });
+        setActive(best);
       },
-      { rootMargin: '-40% 0px -55% 0px' }
+      { rootMargin: '-25% 0px -35% 0px', threshold: [0, 0.15, 0.35, 0.6, 1] }
     );
-    ids.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+
+    sections.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
   }, [pathname]);
 
   /* Lock body scroll while the drawer is open */
+  useScrollLock(open);
+
+  /* Close the drawer on Escape and after any route change */
   useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
+    if (!open) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab') return;
+
+      /* Keep focus inside the drawer while it is modal */
+      const focusable = drawerRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      if (!focusable || focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    window.addEventListener('keydown', onKey);
+    closeRef.current?.focus();
+    /* Capture both nodes now — by cleanup time the drawer is unmounting and
+       the refs may already be null. */
+    const trigger = triggerRef.current;
+    const drawer = drawerRef.current;
     return () => {
-      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+      /* Return focus to the hamburger, but only if focus is still inside the
+         drawer — otherwise closing would yank focus away from wherever the
+         user has already moved (e.g. a link they just activated). */
+      if (trigger && drawer?.contains(document.activeElement)) {
+        trigger.focus();
+      }
     };
   }, [open]);
+
+  /* Any route change closes the drawer */
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   const handleNav = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setOpen(false);
-    if (pathname === '/') {
-      scrollToId(href);
-    } else {
-      navigate('/', { state: { scrollTo: href } });
-    }
+    navigateToSection(href, pathname, navigate);
   };
 
   return (
@@ -113,9 +177,12 @@ export default function Navbar() {
 
             {/* Mobile hamburger */}
             <button
+              ref={triggerRef}
               type="button"
               onClick={() => setOpen(true)}
               aria-label="Open menu"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-900/10 bg-white/80 text-brand-dark shadow-card dark:border-white/15 dark:bg-white/10 dark:text-white lg:hidden"
             >
               <Menu className="h-5 w-5" />
@@ -136,6 +203,8 @@ export default function Navbar() {
               onClick={() => setOpen(false)}
             />
             <motion.aside
+              id="mobile-menu"
+              ref={drawerRef}
               role="dialog"
               aria-modal="true"
               aria-label="Mobile menu"
@@ -148,6 +217,7 @@ export default function Navbar() {
               <div className="flex items-center justify-between">
                 <LogoWordmark />
                 <button
+                  ref={closeRef}
                   type="button"
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"

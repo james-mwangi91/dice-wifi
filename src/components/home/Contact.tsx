@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
@@ -22,6 +22,8 @@ const EMAILJS_CONFIG = {
   publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY ?? '',
 };
 
+const EMAILJS_READY = Boolean(EMAILJS_CONFIG.serviceId && EMAILJS_CONFIG.templateId && EMAILJS_CONFIG.publicKey);
+
 const contactCards = [
   { icon: Phone, label: 'Phone', value: BRAND.phone, href: BRAND.phoneHref },
   { icon: MessageCircle, label: 'WhatsApp', value: 'Chat with sales', href: BRAND.whatsappHref },
@@ -39,11 +41,34 @@ export default function Contact() {
   } = useForm<ContactFormData>();
 
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  /* Timers are cleared on unmount so a late reset cannot touch a dead component */
+  const resetTimer = useRef<number | null>(null);
+
+  useEffect(
+    () => () => {
+      if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
+    },
+    []
+  );
+
+  const scheduleReset = () => {
+    if (resetTimer.current !== null) window.clearTimeout(resetTimer.current);
+    resetTimer.current = window.setTimeout(() => setStatus('idle'), 6000);
+  };
 
   const onSubmit = async (data: ContactFormData) => {
     setStatus('sending');
     try {
-      if (EMAILJS_CONFIG.serviceId && EMAILJS_CONFIG.templateId) {
+      if (!EMAILJS_READY) {
+        /* Never fake a success in production — a visitor who sees "message sent"
+           when nothing was delivered is worse than an honest error. */
+        if (import.meta.env.PROD) throw new Error('EmailJS is not configured');
+
+        console.warn(
+          'EmailJS not configured — simulating a send in dev only. Add VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID and VITE_EMAILJS_PUBLIC_KEY to enable live delivery.'
+        );
+        await new Promise((r) => setTimeout(r, 1200));
+      } else {
         await emailjs.send(
           EMAILJS_CONFIG.serviceId,
           EMAILJS_CONFIG.templateId,
@@ -54,19 +79,16 @@ export default function Contact() {
             location: data.location,
             message: data.message,
           },
-          EMAILJS_CONFIG.publicKey
+          { publicKey: EMAILJS_CONFIG.publicKey }
         );
-      } else {
-        // Dev mode without EmailJS credentials — simulate a successful send
-        console.warn('EmailJS not configured — simulating successful form submission. Add VITE_EMAILJS_* env vars to enable live delivery.');
-        await new Promise((r) => setTimeout(r, 1200));
       }
       setStatus('sent');
       reset();
-      window.setTimeout(() => setStatus('idle'), 6000);
-    } catch {
+      scheduleReset();
+    } catch (err) {
+      console.error('Contact form submission failed:', err);
       setStatus('error');
-      window.setTimeout(() => setStatus('idle'), 6000);
+      scheduleReset();
     }
   };
 
@@ -280,7 +302,7 @@ export default function Contact() {
                     </button>
                     {status === 'error' && (
                       <p className="text-sm font-semibold text-rose-500" role="alert">
-                        Something went wrong. Please try again or call {BRAND.phone}.
+                        We could not send that. Please call {BRAND.phone} or email {BRAND.email} and we will pick it up right away.
                       </p>
                     )}
                   </div>
