@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, ChevronDown, Wifi } from 'lucide-react';
 import { HERO_STATS } from '../../constants';
 import Button from '../ui/Button';
 import CountUpNumber from '../ui/CountUp';
 import { fadeUp, stagger } from '../../animations/variants';
+import { navigateToSection } from '../../utils/scroll';
 import { cn } from '../../utils/cn';
 
 /** Carousel slides for the hero visual */
@@ -99,6 +101,9 @@ function NetworkVisual() {
 
 /** Full-viewport hero with stats and animated network visual */
 export default function Hero() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   return (
     <section id="home" className="relative flex min-h-screen items-center overflow-hidden bg-brand-dark">
       {/* Background image + overlays */}
@@ -181,7 +186,7 @@ export default function Hero() {
             <Button
               size="lg"
               variant="glass"
-              onClick={() => document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => navigateToSection('packages', pathname, navigate)}
             >
               View Packages
             </Button>
@@ -209,7 +214,7 @@ export default function Hero() {
         href="#about"
         onClick={(e) => {
           e.preventDefault();
-          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+          navigateToSection('about', pathname, navigate);
         }}
         className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-slate-400 transition-colors hover:text-brand-accent lg:flex"
         aria-label="Scroll to About section"

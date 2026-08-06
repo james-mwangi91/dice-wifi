@@ -1,22 +1,20 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import Logo from '../Logo';
+import { useReducedMotion, useScrollLock } from '../../hooks';
 
 /** Full-screen brand loading screen shown on first mount */
 export default function Loader() {
+  const reduced = useReducedMotion();
   const [visible, setVisible] = useState(true);
 
-  useEffect(() => {
-    const t = window.setTimeout(() => setVisible(false), 1900);
-    return () => window.clearTimeout(t);
-  }, []);
+  useScrollLock(visible);
 
   useEffect(() => {
-    document.body.style.overflow = visible ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [visible]);
+    /* Respect reduced-motion by cutting the splash short rather than removing it */
+    const t = window.setTimeout(() => setVisible(false), reduced ? 200 : 1900);
+    return () => window.clearTimeout(t);
+  }, [reduced]);
 
   return (
     <AnimatePresence>
@@ -25,6 +23,8 @@ export default function Loader() {
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-brand-dark"
           exit={{ opacity: 0, scale: 1.06 }}
           transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          role="status"
+          aria-live="polite"
           aria-label="Loading DICE WiFi"
         >
           <div className="absolute inset-0 bg-grid opacity-40" />

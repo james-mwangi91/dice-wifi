@@ -11,6 +11,7 @@
     <meta name="keywords" content="DICE WiFi, internet provider Kenya, fibre internet Nairobi, home internet Kenya, business internet Kenya, unlimited wifi" />
     <meta name="author" content="DICE WiFi" />
     <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://dicewifi.co.ke/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -36,9 +37,28 @@
     <!-- Prevent theme flash: apply persisted theme before paint -->
     <script>
       (function () {
-        var stored = localStorage.getItem('dice-theme');
-        var dark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        if (dark) document.documentElement.classList.add('dark');
+        try {
+          var stored = localStorage.getItem('dice-theme');
+          var dark = stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (dark) document.documentElement.classList.add('dark');
+        } catch (e) {
+          /* storage blocked — default to light */
+        }
+      })();
+
+      /* Restore a deep link captured by 404.html before the router mounts */
+      (function () {
+        try {
+          var target = sessionStorage.getItem('dice-spa-redirect');
+          if (!target) return;
+          sessionStorage.removeItem('dice-spa-redirect');
+          var url = new URL(target);
+          if (url.origin === location.origin && url.href !== location.href) {
+            history.replaceState(null, '', url.pathname + url.search + url.hash);
+          }
+        } catch (e) {
+          /* nothing to restore */
+        }
       })();
     </script>
 

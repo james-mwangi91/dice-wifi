@@ -1,11 +1,15 @@
 import { ArrowUpRight } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SERVICES } from '../../constants';
 import SectionHeading from '../ui/SectionHeading';
 import { Stagger, StaggerItem } from '../ui/Reveal';
-import { scrollToId } from '../../utils/scroll';
+import { navigateToSection } from '../../utils/scroll';
 
 /** Services grid — 8 offerings with hover interactions */
 export default function Services() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
   return (
     <section id="services" className="relative overflow-hidden bg-white py-24 lg:py-32 dark:bg-slate-900">
       <div className="absolute inset-0 bg-grid opacity-40" aria-hidden="true" />
@@ -37,7 +41,7 @@ export default function Services() {
 
                 <button
                   type="button"
-                  onClick={() => scrollToId('contact')}
+                  onClick={() => navigateToSection('contact', pathname, navigate)}
                   className="mt-5 inline-flex items-center gap-1.5 text-sm font-bold text-brand-primary transition-all duration-300 group-hover:gap-3 dark:text-brand-accent"
                 >
                   Learn more <ArrowUpRight className="h-4 w-4" />

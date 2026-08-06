@@ -1,3 +1,5 @@
+import type { NavigateFunction } from 'react-router-dom';
+
 /** Smoothly scroll to a section by id */
 export function scrollToId(id: string): void {
   const el = document.getElementById(id);
@@ -7,7 +9,7 @@ export function scrollToId(id: string): void {
 }
 
 /** Scroll to a section, navigating home first if required */
-export function navigateToSection(id: string, pathname: string, navigate: (to: string, opts?: unknown) => void): void {
+export function navigateToSection(id: string, pathname: string, navigate: NavigateFunction): void {
   if (pathname === '/') {
     scrollToId(id);
   } else {

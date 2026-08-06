@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "PowerShell(npx vite build --base=/dice-wifi/ 2>&1 | Select-Object -Last 3; Write-Output \"=== index.html ===\"; Select-String -Path dist/index.html -Pattern 'favicon|manifest|assets/' -AllMatches | ForEach-Object { $_.Line.Trim\\(\\) }; Write-Output \"=== manifest ===\"; Get-Content dist/manifest.webmanifest | Select-String 'start_url|scope|\"id\"|src'; Write-Output \"=== sw.js precache ===\"; Get-Content dist/sw.js | Select-String 'PRECACHE_URLS')",
+      "PowerShell(npx tsc --noEmit 2>&1 | Select-Object -First 30)",
+      "Bash(npm install *)"
+    ]
+  }
+}

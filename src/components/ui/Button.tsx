@@ -1,4 +1,4 @@
-import { useRef, useState, type MouseEvent, type ReactNode, type ButtonHTMLAttributes } from 'react';
+import { useEffect, useRef, useState, type MouseEvent, type ReactNode, type ButtonHTMLAttributes, type Ref } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils/cn';
@@ -59,9 +59,19 @@ export default function Button({
   icon,
   ...rest
 }: ButtonProps) {
-  const ref = useRef<HTMLButtonElement | null>(null);
+  /* Shared by all three render targets so links ripple too */
+  const ref = useRef<HTMLElement | null>(null);
   const [ripples, setRipples] = useState<Ripple[]>([]);
   const rippleId = useRef(0);
+  const timers = useRef<number[]>([]);
+
+  /* Drop pending ripple cleanups if the button unmounts mid-animation */
+  useEffect(
+    () => () => {
+      timers.current.forEach((t) => window.clearTimeout(t));
+    },
+    []
+  );
 
   const spawnRipple = (e: MouseEvent<HTMLElement>) => {
     const el = ref.current;
@@ -72,9 +82,11 @@ export default function Button({
     const y = e.clientY - rect.top - size / 2;
     const id = ++rippleId.current;
     setRipples((prev) => [...prev, { id, x, y, size }]);
-    window.setTimeout(() => {
+    const timer = window.setTimeout(() => {
       setRipples((prev) => prev.filter((r) => r.id !== id));
+      timers.current = timers.current.filter((t) => t !== timer);
     }, 700);
+    timers.current.push(timer);
   };
 
   const handleClick = (e: MouseEvent<HTMLElement>) => {
@@ -106,8 +118,8 @@ export default function Button({
 
   if (to) {
     return (
-      <motion.span {...motionProps} className="inline-flex">
-        <Link to={to} onClick={handleClick} className={classes}>
+      <motion.span {...motionProps} className={cn('inline-flex', fullWidth && 'w-full')}>
+        <Link ref={ref as Ref<HTMLAnchorElement>} to={to} onClick={handleClick} className={classes}>
           {content}
         </Link>
       </motion.span>
@@ -115,9 +127,17 @@ export default function Button({
   }
 
   if (href) {
+    const external = /^https?:\/\//i.test(href);
     return (
-      <motion.span {...motionProps} className="inline-flex">
-        <a href={href} onClick={handleClick} className={classes} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noreferrer noopener' : undefined}>
+      <motion.span {...motionProps} className={cn('inline-flex', fullWidth && 'w-full')}>
+        <a
+          ref={ref as Ref<HTMLAnchorElement>}
+          href={href}
+          onClick={handleClick}
+          className={classes}
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noreferrer noopener' : undefined}
+        >
           {content}
         </a>
       </motion.span>
@@ -125,8 +145,8 @@ export default function Button({
   }
 
   return (
-    <motion.span {...motionProps} className="inline-flex">
-      <button ref={ref} type="button" onClick={handleClick} className={classes} {...rest}>
+    <motion.span {...motionProps} className={cn('inline-flex', fullWidth && 'w-full')}>
+      <button ref={ref as Ref<HTMLButtonElement>} type="button" onClick={handleClick} className={classes} {...rest}>
         {content}
       </button>
     </motion.span>

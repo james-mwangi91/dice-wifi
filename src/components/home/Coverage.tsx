@@ -1,12 +1,12 @@
 import { useState, type FormEvent } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, Clock3, MapPin, PartyPopper, Search, XCircle } from 'lucide-react';
+import { CheckCircle2, Clock, Clock3, MapPin, PartyPopper, Search, XCircle } from 'lucide-react';
 import { COVERAGE_AREAS, COVERAGE_EXTRAS } from '../../constants';
 import { cn } from '../../utils/cn';
 import SectionHeading from '../ui/SectionHeading';
 import { Stagger, StaggerItem } from '../ui/Reveal';
 
-type ResultState = { status: 'found' | 'missing'; area: string } | null;
+type ResultState = { status: 'live' | 'expanding' | 'missing'; area: string } | null;
 
 /** Interactive coverage checker with animated location markers */
 export default function Coverage() {
@@ -22,8 +22,11 @@ export default function Coverage() {
     if (!q) return;
     const exact = COVERAGE_AREAS.find((a) => normalize(a.name) === q);
     const partial = COVERAGE_AREAS.find((a) => normalize(a.name).includes(q) || q.includes(normalize(a.name)));
-    if (exact || partial) {
-      setResult({ status: 'found', area: (exact ?? partial)!.name });
+    const match = exact ?? partial;
+    if (match) {
+      /* Report the area's real rollout state — an "expanding" town is not yet
+         installable, so claiming full coverage would mislead the visitor. */
+      setResult({ status: match.status, area: match.name });
       setWaitlisted(false);
     } else {
       setResult({ status: 'missing', area: query.trim() });
@@ -72,7 +75,8 @@ export default function Coverage() {
                         type="button"
                         onClick={() => {
                           setQuery(area.name);
-                          setResult({ status: 'found', area: area.name });
+                          setResult({ status: area.status, area: area.name });
+                          setWaitlisted(false);
                         }}
                         aria-label={`Check coverage in ${area.name}`}
                         className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
@@ -133,6 +137,9 @@ export default function Coverage() {
                     onChange={(e) => {
                       setQuery(e.target.value);
                       setResult(null);
+                      /* A fresh search must not keep showing the previous
+                         area's waitlist confirmation */
+                      setWaitlisted(false);
                     }}
                     placeholder="e.g. Ruiru, Kahawa West…"
                     className="w-full bg-transparent px-3 py-3.5 text-sm text-brand-dark placeholder:text-slate-400 focus:outline-none dark:text-white"
@@ -154,7 +161,8 @@ export default function Coverage() {
                     type="button"
                     onClick={() => {
                       setQuery(area.name);
-                      setResult({ status: 'found', area: area.name });
+                      setResult({ status: area.status, area: area.name });
+                      setWaitlisted(false);
                     }}
                     className="rounded-full border border-slate-900/10 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 transition-all hover:border-brand-primary/40 hover:text-brand-primary dark:border-white/10 dark:bg-slate-900 dark:text-slate-300 dark:hover:text-brand-accent"
                   >
@@ -175,19 +183,29 @@ export default function Coverage() {
                       transition={{ duration: 0.35 }}
                       className={cn(
                         'rounded-2xl border p-4 text-sm',
-                        result.status === 'found'
+                        result.status === 'live'
                           ? 'border-emerald-500/25 bg-emerald-500/5 text-emerald-700 dark:text-emerald-400'
                           : 'border-amber-500/25 bg-amber-500/5 text-amber-700 dark:text-amber-400'
                       )}
                       role="status"
                     >
-                      {result.status === 'found' ? (
+                      {result.status === 'live' ? (
                         <div className="flex items-start gap-3">
                           <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" />
                           <div>
                             <p className="font-bold">Great news! {result.area} is fully covered.</p>
                             <p className="mt-1 text-xs leading-relaxed opacity-80">
                               Installation available within 48 hours. Choose a package and get connected today.
+                            </p>
+                          </div>
+                        </div>
+                      ) : result.status === 'expanding' ? (
+                        <div className="flex items-start gap-3">
+                          <Clock className="mt-0.5 h-5 w-5 shrink-0" />
+                          <div>
+                            <p className="font-bold">{result.area} is rolling out now.</p>
+                            <p className="mt-1 text-xs leading-relaxed opacity-80">
+                              Our network is being built out here. Talk to our team for the current install timeline in your street.
                             </p>
                           </div>
                         </div>

@@ -46,7 +46,7 @@ export default function NetworkStatus() {
         </Stagger>
 
         <p className="mt-8 text-center text-xs font-medium text-slate-400">
-          Last checked: just now · Status auto-refreshes every 60 seconds
+          Indicative service levels · For live incident updates contact support
         </p>
       </div>
     </section>

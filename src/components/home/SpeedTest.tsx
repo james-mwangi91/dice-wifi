@@ -33,73 +33,115 @@ const EMPTY_RESULTS: SpeedResult = { download: null, upload: null, ping: null };
 async function measurePing(signal: AbortSignal): Promise<number> {
   const sources = [`${ENDPOINT}/__down?bytes=0`, FALLBACK_URL];
   const samples: number[] = [];
+
   for (const url of sources) {
     for (let i = 0; i < 3; i++) {
       if (signal.aborted) throw new Error('Cancelled');
       const start = performance.now();
       try {
-        await fetch(url, { cache: 'no-store', signal });
+        /* Read the body so the timing covers a complete round trip */
+        const res = await fetch(`${url}${url.includes('?') ? '&' : '?'}cb=${i}`, { cache: 'no-store', signal });
+        await res.arrayBuffer();
         samples.push(performance.now() - start);
       } catch {
-        /* skip failed sample */
+        /* skip failed sample and try the next source */
       }
     }
-    if (samples.length >= 3) break;
+    if (samples.length > 0) break;
   }
+
   if (samples.length === 0) throw new Error('Ping test failed');
   return Math.min(...samples);
 }
 
-/** Download a streamed payload and report aggregate throughput */
-async function measureFromStream(url: string, signal: AbortSignal, onProgress: (received: number, mbps: number) => void): Promise<number> {
-  const start = performance.now();
+/** Abort `signal` after `ms`, cleaning up the timer when the caller finishes */
+function withTimeout<T>(signal: AbortSignal, ms: number, run: (signal: AbortSignal) => Promise<T>): Promise<T> {
+  const controller = new AbortController();
+  const onAbort = () => controller.abort();
+  if (signal.aborted) controller.abort();
+  else signal.addEventListener('abort', onAbort, { once: true });
+
+  const timer = window.setTimeout(() => controller.abort(), ms);
+  return run(controller.signal).finally(() => {
+    window.clearTimeout(timer);
+    signal.removeEventListener('abort', onAbort);
+  });
+}
+
+/** Stream a payload, reporting bytes received so far; resolves with the total */
+async function measureFromStreamBytes(url: string, signal: AbortSignal, onProgress: (received: number) => void): Promise<number> {
   const res = await fetch(url, { cache: 'no-store', signal });
   if (!res.ok || !res.body) throw new Error('Download test failed');
 
   const reader = res.body.getReader();
   let received = 0;
   let lastUpdate = performance.now();
+
   for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
     received += value.byteLength;
-    const mbps = (received * 8) / ((performance.now() - start) / 1000) / 1_000_000;
     if (performance.now() - lastUpdate > 350) {
       lastUpdate = performance.now();
-      onProgress(received, mbps);
+      onProgress(received);
     }
   }
-  return (received * 8) / ((performance.now() - start) / 1000) / 1_000_000;
+
+  /* Always report the final total — a payload that finishes inside the
+     350 ms throttle window would otherwise never be reported at all. */
+  onProgress(received);
+  return received;
 }
 
 /** Primary download — Cloudflare edge network */
 async function measureDownload(signal: AbortSignal, onProgress: (pct: number, mbps: number) => void): Promise<number> {
-  const mbps = await measureFromStream(`${ENDPOINT}/__down?bytes=${DOWNLOAD_BYTES}`, signal, (received, live) => {
-    onProgress(Math.min(100, (received / DOWNLOAD_BYTES) * 100), live);
-  });
-  return mbps;
+  const start = performance.now();
+  const report = (received: number) => {
+    const elapsed = (performance.now() - start) / 1000;
+    onProgress(Math.min(100, (received / DOWNLOAD_BYTES) * 100), elapsed > 0 ? (received * 8) / elapsed / 1_000_000 : 0);
+  };
+
+  const received = await measureFromStreamBytes(`${ENDPOINT}/__down?bytes=${DOWNLOAD_BYTES}`, signal, report);
+  return (received * 8) / ((performance.now() - start) / 1000) / 1_000_000;
 }
 
 /** Fallback download — real files from a public CDN (aggregate rounds) */
 async function measureFallbackDownload(signal: AbortSignal, onProgress: (pct: number, mbps: number) => void): Promise<number> {
-  let received = 0;
+  const total = FALLBACK_FILE_BYTES * FALLBACK_ROUNDS;
+  let completed = 0;
   const start = performance.now();
+
   for (let i = 0; i < FALLBACK_ROUNDS; i++) {
     if (signal.aborted) throw new Error('Cancelled');
-    await measureFromStream(`${FALLBACK_URL}?cb=${i}`, signal, (bytes, live) => {
-      received = bytes;
-      onProgress(Math.min(100, (received / (FALLBACK_FILE_BYTES * FALLBACK_ROUNDS)) * 100), live);
+    /* measureFromStream reports bytes for the current round only, so the
+       running total is the rounds already finished plus the live round. */
+    const roundBytes = await measureFromStreamBytes(`${FALLBACK_URL}?cb=${i}`, signal, (bytes) => {
+      const received = completed + bytes;
+      const elapsed = (performance.now() - start) / 1000;
+      onProgress(Math.min(100, (received / total) * 100), elapsed > 0 ? (received * 8) / elapsed / 1_000_000 : 0);
     });
+    completed += roundBytes;
   }
-  return (received * 8) / ((performance.now() - start) / 1000) / 1_000_000;
+
+  return (completed * 8) / ((performance.now() - start) / 1000) / 1_000_000;
+}
+
+/** Largest random payload the Web Crypto API will fill in a single call */
+const CRYPTO_CHUNK = 65_536;
+
+/** Fill a buffer with random bytes, respecting getRandomValues' 64 KiB limit */
+function randomBytes(size: number): Uint8Array {
+  const buf = new Uint8Array(size);
+  for (let offset = 0; offset < size; offset += CRYPTO_CHUNK) {
+    crypto.getRandomValues(buf.subarray(offset, Math.min(offset + CRYPTO_CHUNK, size)));
+  }
+  return buf;
 }
 
 /** Upload — CORS-safelisted content type avoids preflight entirely */
 function measureUpload(signal: AbortSignal, onProgress: (pct: number) => void): Promise<number> {
   return new Promise((resolve, reject) => {
-    const payload = new Uint8Array(UPLOAD_BYTES);
-    crypto.getRandomValues(payload);
-    const blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
+    const blob = new Blob([randomBytes(UPLOAD_BYTES)], { type: 'text/plain;charset=UTF-8' });
 
     const xhr = new XMLHttpRequest();
     const onAbort = () => xhr.abort();
@@ -160,6 +202,18 @@ export default function SpeedTest() {
     setProgress(0);
     setPhase('testing');
 
+    /* Only the run that is still current may drive the UI */
+    const isCurrent = () => runId.current === id && !controller.signal.aborted;
+    const setIfCurrent = <T,>(setter: (v: T) => void, value: T) => {
+      if (isCurrent()) setter(value);
+    };
+
+    const onDownloadProgress = (pct: number, mbps: number) => {
+      if (!isCurrent()) return;
+      setProgress(10 + pct * 0.65);
+      setLiveSpeed(mbps);
+    };
+
     try {
       setProgress(5);
       try {
@@ -168,34 +222,33 @@ export default function SpeedTest() {
       } catch {
         /* ping is optional */
       }
+      if (!isCurrent()) return;
       setProgress(10);
 
       let download: number | null = null;
       try {
-        download = await measureDownload(controller.signal, (pct, mbps) => {
-          setProgress(10 + pct * 0.65);
-          setLiveSpeed(mbps);
-        });
+        download = await withTimeout(controller.signal, TIMEOUT_MS, (s) => measureDownload(s, onDownloadProgress));
       } catch {
-        download = await measureFallbackDownload(controller.signal, (pct, mbps) => {
-          setProgress(10 + pct * 0.65);
-          setLiveSpeed(mbps);
-        });
+        if (!isCurrent()) return;
+        download = await withTimeout(controller.signal, TIMEOUT_MS, (s) => measureFallbackDownload(s, onDownloadProgress));
       }
+      if (!isCurrent()) return;
       apply((r) => ({ ...r, download }));
       setProgress(75);
 
       let upload: number | null = null;
       try {
-        upload = await measureUpload(controller.signal, (pct) => setProgress(75 + pct * 0.25));
+        upload = await measureUpload(controller.signal, (pct) => setIfCurrent(setProgress, 75 + pct * 0.25));
       } catch {
-        upload = null; /* upload is optional */
+        upload = null; /* upload is optional — the download result still stands */
       }
+      if (!isCurrent()) return;
       apply((r) => ({ ...r, upload }));
       setProgress(100);
       setPhase('done');
     } catch {
-      if (runId.current === id) {
+      /* A superseded or cancelled run must not surface as a failure */
+      if (isCurrent()) {
         setProgress(0);
         setPhase('error');
       }

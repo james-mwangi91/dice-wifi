@@ -16,8 +16,9 @@ export default function CustomCursor() {
 
   useEffect(() => {
     const fine = window.matchMedia('(pointer: fine)').matches;
-    if (!fine || reduced) return;
-    setEnabled(true);
+    /* Must be able to turn *off* again — a user who switches on reduced motion
+       mid-session was previously stuck with the custom cursor. */
+    setEnabled(fine && !reduced);
   }, [reduced]);
 
   useEffect(() => {

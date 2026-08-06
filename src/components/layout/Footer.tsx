@@ -1,7 +1,8 @@
-import { useState, type FormEvent } from 'react';
+import { useState, type FormEvent, type MouseEvent } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowUpRight, Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, Twitter, Youtube } from 'lucide-react';
 import { BRAND, NAV_LINKS, PACKAGES } from '../../constants';
-import { scrollToId } from '../../utils/scroll';
+import { navigateToSection } from '../../utils/scroll';
 import { LogoWordmark } from '../Logo';
 
 const footerSocials = [
@@ -16,6 +17,15 @@ const footerSocials = [
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
+
+  /* The footer renders on every route, so section links must be able to
+     navigate home first rather than looking for an element that is not there. */
+  const goToSection = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
+    navigateToSection(id, pathname, navigate);
+  };
 
   const handleNewsletter = (e: FormEvent) => {
     e.preventDefault();
@@ -77,10 +87,7 @@ export default function Footer() {
                 <li key={link.href}>
                   <a
                     href={`#${link.href}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToId(link.href);
-                    }}
+                    onClick={(e) => goToSection(e, link.href)}
                     className="group inline-flex items-center gap-1.5 transition-colors hover:text-brand-accent"
                   >
                     <ArrowUpRight className="h-3.5 w-3.5 opacity-0 transition-all duration-300 group-hover:opacity-100" />
@@ -99,10 +106,7 @@ export default function Footer() {
                 <li key={pkg.id}>
                   <a
                     href="#packages"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToId('packages');
-                    }}
+                    onClick={(e) => goToSection(e, 'packages')}
                     className="inline-flex items-center gap-1.5 transition-colors hover:text-brand-accent"
                   >
                     <span className="rounded-md bg-white/5 px-1.5 py-0.5 text-[11px] font-bold text-brand-accent">{pkg.speed}</span>
@@ -111,7 +115,7 @@ export default function Footer() {
                 </li>
               ))}
               <li>
-                <a href="#coverage" onClick={(e) => { e.preventDefault(); scrollToId('coverage'); }} className="transition-colors hover:text-brand-accent">
+                <a href="#coverage" onClick={(e) => goToSection(e, 'coverage')} className="transition-colors hover:text-brand-accent">
                   Coverage Areas
                 </a>
               </li>
@@ -153,14 +157,17 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 py-8 text-xs text-slate-500 sm:flex-row">
           <p>© {new Date().getFullYear()} DICE WiFi. All rights reserved. · Fast. Reliable. Unlimited.</p>
+          {/* These policies have no page yet. Linking them to the homepage would
+              look functional while going nowhere, so they point at the contact
+              team until real documents exist. */}
           <div className="flex gap-6">
-            <a href="#home" onClick={(e) => { e.preventDefault(); scrollToId('home'); }} className="transition-colors hover:text-brand-accent">
+            <a href={BRAND.emailHref} className="transition-colors hover:text-brand-accent">
               Privacy Policy
             </a>
-            <a href="#home" onClick={(e) => { e.preventDefault(); scrollToId('home'); }} className="transition-colors hover:text-brand-accent">
+            <a href={BRAND.emailHref} className="transition-colors hover:text-brand-accent">
               Terms of Service
             </a>
-            <a href="#home" onClick={(e) => { e.preventDefault(); scrollToId('home'); }} className="transition-colors hover:text-brand-accent">
+            <a href={BRAND.emailHref} className="transition-colors hover:text-brand-accent">
               Fair Usage
             </a>
           </div>

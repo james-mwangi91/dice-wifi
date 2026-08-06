@@ -1,14 +1,30 @@
-/* DICE WiFi — service worker (production only) */
+/* DICE WiFi — service worker (production only)
 
-const CACHE_NAME = 'dice-wifi-v1';
-const PRECACHE_URLS = ['/', '/index.html', '/manifest.webmanifest', '/favicon.svg'];
+   All paths are derived from the worker's own location so the same file works
+   whether the app is served from a domain root or a sub-path (GitHub Pages). */
 
-/* Install: precache the app shell */
+const CACHE_NAME = 'dice-wifi-v2';
+
+/* '/sw.js' -> '/', '/dice-wifi/sw.js' -> '/dice-wifi/' */
+const BASE = self.location.pathname.replace(/sw\.js$/, '');
+
+const SHELL_URL = `${BASE}index.html`;
+const PRECACHE_URLS = [BASE, SHELL_URL, `${BASE}manifest.webmanifest`, `${BASE}favicon.svg`];
+
+/* Install: precache the app shell. Individual failures must not abort install. */
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => cache.addAll(PRECACHE_URLS))
+      .then((cache) =>
+        Promise.all(
+          PRECACHE_URLS.map((url) =>
+            cache.add(new Request(url, { cache: 'reload' })).catch(() => {
+              /* a missing shell entry should not break the whole install */
+            })
+          )
+        )
+      )
       .then(() => self.skipWaiting())
   );
 });
@@ -23,7 +39,6 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-/* Fetch: cache-first for assets, network-first for navigation with offline fallback */
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -31,33 +46,54 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  /* Navigations: network first, fall back to cached shell for offline support */
+  /* Navigations: network first, fall back to the cached shell when offline */
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then((response) => {
           if (response.ok) {
             const copy = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put('/index.html', copy));
+            caches.open(CACHE_NAME).then((cache) => cache.put(SHELL_URL, copy));
           }
           return response;
         })
-        .catch(() => caches.match('/index.html'))
+        .catch(() => caches.match(SHELL_URL))
     );
     return;
   }
 
-  /* Everything else: cache first, then network */
+  /* Build assets carry a content hash, so they are safe to serve cache-first */
+  if (url.pathname.startsWith(`${BASE}assets/`)) {
+    event.respondWith(
+      caches.match(request).then(
+        (cached) =>
+          cached ??
+          fetch(request).then((response) => {
+            if (response.ok) {
+              const copy = response.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+            }
+            return response;
+          })
+      )
+    );
+    return;
+  }
+
+  /* Everything else (icons, manifest): serve from cache but refresh in the
+     background so an updated file is picked up on the next visit. */
   event.respondWith(
     caches.match(request).then((cached) => {
-      if (cached) return cached;
-      return fetch(request).then((response) => {
-        if (response.ok) {
-          const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-        }
-        return response;
-      });
+      const network = fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => cached);
+      return cached ?? network;
     })
   );
 });
