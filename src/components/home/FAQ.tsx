@@ -1,85 +1,85 @@
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { HelpCircle, Plus } from 'lucide-react';
-import { FAQS } from '../../constants';
+import { Phone, Plus } from 'lucide-react';
+import { BRAND, FAQS } from '../../constants';
 import { cn } from '../../utils/cn';
 import SectionHeading from '../ui/SectionHeading';
-import { Stagger, StaggerItem } from '../ui/Reveal';
+import Button from '../ui/Button';
 
-/** FAQ accordion with smooth height animations */
+/** FAQ — heading on the left, accordion on the right */
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number>(0);
 
   return (
-    <section id="faq" className="relative overflow-hidden bg-white py-24 lg:py-32 dark:bg-slate-900">
-      <div className="absolute inset-0 bg-grid opacity-40" aria-hidden="true" />
+    <section id="faq" className="relative py-24 lg:py-32">
+      <div className="mx-auto grid max-w-7xl gap-12 px-5 sm:px-6 lg:grid-cols-12 lg:px-8">
+        <div className="lg:col-span-5">
+          <div className="lg:sticky lg:top-32">
+            <SectionHeading
+              eyebrow="FAQ"
+              title={
+                <>
+                  Straight <span className="text-gradient">answers.</span>
+                </>
+              }
+              subtitle="No jargon, no fine print. If your question isn't here, call us — a person picks up."
+            />
+            <div className="mt-8">
+              <Button href={BRAND.phoneHref} variant="dark" icon={<Phone className="h-4 w-4" />}>
+                {BRAND.phone}
+              </Button>
+            </div>
+          </div>
+        </div>
 
-      <div className="relative mx-auto max-w-4xl px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="FAQ"
-          title={
-            <>
-              Questions? <span className="text-gradient">Answered.</span>
-            </>
-          }
-          subtitle="Everything you need to know before you get connected. Still curious? Our team is one call away."
-        />
-
-        <Stagger className="mt-14 space-y-4" gap={0.05}>
+        <div className="border-t border-slate-900/15 lg:col-span-7 dark:border-white/15">
           {FAQS.map((faq, index) => {
             const open = openIndex === index;
             return (
-              <StaggerItem key={faq.question}>
-                <div
-                  className={cn(
-                    'overflow-hidden rounded-3xl border transition-all duration-300',
-                    open
-                      ? 'border-brand-primary/30 bg-white shadow-soft dark:border-brand-accent/30 dark:bg-slate-900/80'
-                      : 'border-slate-900/5 bg-white/70 hover:border-brand-primary/20 dark:border-white/10 dark:bg-slate-900/50 dark:hover:border-brand-accent/20'
-                  )}
-                >
+              <div key={faq.question} className="border-b border-slate-900/15 dark:border-white/15">
+                <h3>
                   <button
                     type="button"
+                    id={`faq-trigger-${index}`}
                     onClick={() => setOpenIndex(open ? -1 : index)}
                     aria-expanded={open}
                     aria-controls={`faq-panel-${index}`}
-                    className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left sm:px-8 sm:py-6"
+                    className="flex w-full items-center justify-between gap-6 py-6 text-left"
                   >
-                    <span className="flex items-center gap-3.5">
-                      <span className={cn('inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors duration-300', open ? 'bg-gradient-brand text-white' : 'bg-brand-primary/10 text-brand-primary dark:bg-brand-accent/10 dark:text-brand-accent')}>
-                        <HelpCircle className="h-4 w-4" />
-                      </span>
-                      <span className="font-display text-sm font-bold text-brand-dark sm:text-base dark:text-white">{faq.question}</span>
-                    </span>
+                    <span className="font-display text-lg font-bold text-brand-dark sm:text-xl dark:text-white">{faq.question}</span>
                     <motion.span
                       animate={{ rotate: open ? 45 : 0 }}
-                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-                      className={cn('inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-300', open ? 'bg-gradient-brand text-white' : 'bg-slate-100 text-slate-500 dark:bg-white/10 dark:text-slate-300')}
+                      transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                      className={cn(
+                        'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-colors duration-200',
+                        open ? 'bg-brand-lime text-brand-dark' : 'border border-slate-900/15 text-brand-dark dark:border-white/20 dark:text-white'
+                      )}
                     >
                       <Plus className="h-4 w-4" />
                     </motion.span>
                   </button>
+                </h3>
 
-                  <AnimatePresence initial={false}>
-                    {open && (
-                      <motion.div
-                        id={`faq-panel-${index}`}
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                      >
-                        <p className="px-6 pb-6 pl-[4.4rem] pr-8 text-sm leading-relaxed text-slate-600 sm:pl-[4.6rem] dark:text-slate-400">
-                          {faq.answer}
-                        </p>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </StaggerItem>
+                <AnimatePresence initial={false}>
+                  {open && (
+                    <motion.div
+                      id={`faq-panel-${index}`}
+                      role="region"
+                      aria-labelledby={`faq-trigger-${index}`}
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="max-w-2xl pb-7 pr-12 leading-relaxed text-slate-600 dark:text-slate-400">{faq.answer}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
-        </Stagger>
+        </div>
       </div>
     </section>
   );

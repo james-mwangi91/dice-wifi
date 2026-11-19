@@ -10,68 +10,59 @@ import SectionHeading from '../ui/SectionHeading';
 import { Stagger, StaggerItem } from '../ui/Reveal';
 import Button from '../ui/Button';
 
-/** Pricing card */
+/** Pricing card — speed is the headline, price second */
 function PlanCard({ plan }: { plan: Plan }) {
+  const speed = plan.speed.replace(/\D/g, '');
+  const f = plan.featured;
+
   return (
     <article
       className={cn(
-        'relative flex h-full flex-col rounded-[2rem] p-8 transition-all duration-300',
-        plan.featured
-          ? 'z-10 bg-brand-dark text-white shadow-soft lg:-translate-y-4 lg:scale-[1.04] lg:hover:-translate-y-6'
-          : 'border border-slate-900/5 bg-white shadow-card hover:-translate-y-2 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60'
+        'relative flex h-full flex-col rounded-[1.75rem] p-7 transition-transform duration-300 hover:-translate-y-1',
+        f
+          ? 'bg-brand-dark text-white ring-2 ring-brand-lime dark:bg-black'
+          : 'border border-slate-900/10 bg-white dark:border-white/10 dark:bg-slate-900'
       )}
     >
-      {plan.badge && (
-        <span className="absolute -top-4 left-1/2 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-gradient-brand px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white shadow-glow">
-          <Crown className="h-3.5 w-3.5" /> {plan.badge}
-        </span>
-      )}
-
-      <div>
-        <h3 className={cn('font-display text-xl font-bold', plan.featured ? 'text-white' : 'text-brand-dark dark:text-white')}>
-          {plan.name}
-        </h3>
-        <p className={cn('mt-1.5 text-xs font-semibold uppercase tracking-widest', plan.featured ? 'text-brand-accent' : 'text-brand-primary dark:text-brand-accent')}>
-          {plan.speed}
-        </p>
+      <div className="flex items-center justify-between">
+        <h3 className={cn('font-display text-lg font-bold', f ? 'text-white' : 'text-brand-dark dark:text-white')}>{plan.name}</h3>
+        {plan.badge && (
+          <span className="inline-flex items-center gap-1 rounded-full bg-brand-lime px-3 py-1 font-display text-[11px] font-bold uppercase tracking-wider text-brand-dark">
+            <Crown className="h-3 w-3" /> {plan.badge}
+          </span>
+        )}
       </div>
 
-      <p className="mt-6 flex items-baseline gap-1.5">
-        <span className={cn('font-display text-4xl font-extrabold tracking-tight', plan.featured ? 'text-white' : 'text-brand-dark dark:text-white')}>
-          {formatKes(plan.price)}
-        </span>
-        <span className={cn('text-sm font-medium', plan.featured ? 'text-slate-400' : 'text-slate-500 dark:text-slate-400')}>/month</span>
+      <p className={cn('mt-6 font-display text-7xl font-extrabold leading-none tracking-[-0.035em]', f ? 'text-brand-lime' : 'text-brand-dark dark:text-white')}>
+        {speed}
+        <span className={cn('ml-1 text-xl font-bold tracking-tight', f ? 'text-white/60' : 'text-slate-400')}>Mbps</span>
       </p>
-      <p className={cn('mt-3 text-sm leading-relaxed', plan.featured ? 'text-slate-300' : 'text-slate-600 dark:text-slate-400')}>
+
+      <p className={cn('mt-5 min-h-[2.75rem] text-sm leading-relaxed', f ? 'text-slate-300' : 'text-slate-600 dark:text-slate-400')}>
         {plan.tagline}
       </p>
 
-      <ul className="mt-7 flex-1 space-y-3.5">
+      <p className={cn('mt-5 flex items-baseline gap-1.5 border-t pt-5', f ? 'border-white/15' : 'border-slate-900/10 dark:border-white/10')}>
+        <span className={cn('text-sm font-bold', f ? 'text-white/60' : 'text-slate-500')}>KES</span>
+        <span className={cn('font-display text-3xl font-extrabold tracking-tight', f ? 'text-white' : 'text-brand-dark dark:text-white')}>
+          {plan.price.toLocaleString('en-KE')}
+        </span>
+        <span className={cn('text-sm', f ? 'text-white/60' : 'text-slate-500 dark:text-slate-400')}>/ month</span>
+      </p>
+
+      <ul className="mt-6 flex-1 space-y-3">
         {plan.features.map((feature) => (
-          <li key={feature} className="flex items-start gap-3 text-sm">
-            <span
-              className={cn(
-                'mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full',
-                plan.featured ? 'bg-brand-accent/20 text-brand-accent' : 'bg-brand-primary/10 text-brand-primary dark:bg-brand-accent/10 dark:text-brand-accent'
-              )}
-            >
-              <Check className="h-3 w-3" strokeWidth={3} />
-            </span>
-            <span className={plan.featured ? 'text-slate-200' : 'text-slate-700 dark:text-slate-300'}>{feature}</span>
+          <li key={feature} className="flex items-start gap-2.5 text-sm">
+            <Check className={cn('mt-0.5 h-4 w-4 shrink-0', f ? 'text-brand-lime' : 'text-brand-primary dark:text-brand-lime')} strokeWidth={3} />
+            <span className={f ? 'text-slate-200' : 'text-slate-700 dark:text-slate-300'}>{feature}</span>
           </li>
         ))}
       </ul>
 
       <div className="mt-8">
-        {plan.featured ? (
-          <Button to="/contact" fullWidth>
-            Apply Now
-          </Button>
-        ) : (
-          <Button to="/contact" variant="outline" fullWidth>
-            Apply Now
-          </Button>
-        )}
+        <Button to="/contact" variant={f ? 'primary' : 'dark'} fullWidth>
+          Choose {plan.name}
+        </Button>
       </div>
     </article>
   );
@@ -96,39 +87,38 @@ export default function Packages() {
   }, [compareOpen]);
 
   return (
-    <section id="packages" className="relative overflow-hidden py-24 lg:py-32">
-      <div className="absolute -left-32 top-1/3 h-96 w-96 rounded-full bg-brand-primary/5 blur-[110px]" aria-hidden="true" />
+    <section id="packages" className="relative py-24 lg:py-32">
+      <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeading
+            eyebrow="Plans & pricing"
+            title={
+              <>
+                Pick a speed. <span className="text-gradient">That&rsquo;s it.</span>
+              </>
+            }
+            subtitle="Every plan is truly unlimited, includes a router and installation where available, and can be changed any month."
+          />
+          <div className="shrink-0">
+            <Button variant="outline" onClick={() => setCompareOpen(true)} icon={<ArrowRight className="h-4 w-4" />}>
+              Compare side by side
+            </Button>
+          </div>
+        </div>
 
-      <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-        <SectionHeading
-          eyebrow="Packages & Pricing"
-          title={
-            <>
-              Simple plans. <span className="text-gradient">Serious speeds.</span>
-            </>
-          }
-          subtitle="Transparent monthly pricing with unlimited data on every plan — no fair usage policies, no hidden fees, no surprises."
-        />
-
-        <Stagger className="mt-20 grid items-stretch gap-8 lg:grid-cols-4" gap={0.1}>
+        <Stagger className="mt-14 grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4" gap={0.08}>
           {PACKAGES.map((plan) => (
-            <StaggerItem key={plan.id} className={cn(plan.featured && 'lg:-mt-4')}>
+            <StaggerItem key={plan.id} className="h-full">
               <PlanCard plan={plan} />
             </StaggerItem>
           ))}
         </Stagger>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3, duration: 0.6 }}
-          className="mt-12 flex justify-center"
-        >
-          <Button variant="glass" onClick={() => setCompareOpen(true)} icon={<ArrowRight className="h-4 w-4 rotate-90" />}>
-            Compare Packages
-          </Button>
-        </motion.div>
+        <p className="mt-8 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-slate-400">
+          <span>Pay with M-Pesa, card or bank</span>
+          <span className="pip text-slate-300 dark:text-slate-600" />
+          <span>30-day money-back guarantee</span>
+        </p>
       </div>
 
       {/* Comparison modal */}
@@ -181,12 +171,12 @@ export default function Packages() {
                           className={cn(
                             'border-b border-slate-900/10 px-4 py-4 text-center font-display text-sm font-bold',
                             pkg.featured
-                              ? 'rounded-tr-2xl bg-gradient-brand text-white'
+                              ? 'bg-brand-lime text-brand-dark'
                               : 'bg-slate-50 text-brand-dark dark:bg-white/5 dark:text-white'
                           )}
                         >
                           <span className="block">{pkg.name}</span>
-                          <span className={cn('mt-0.5 block text-xs font-semibold', pkg.featured ? 'text-white/85' : 'text-slate-400')}>
+                          <span className={cn('mt-0.5 block text-xs font-semibold', pkg.featured ? 'text-brand-dark/70' : 'text-slate-400')}>
                             {pkg.speed} · {formatKes(pkg.price)}
                           </span>
                         </th>

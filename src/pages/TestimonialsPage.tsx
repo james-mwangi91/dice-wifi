@@ -40,7 +40,7 @@ export default function TestimonialsPage() {
         </div>
       </section>
 
-      <Testimonials />
+      <Testimonials variant="wall" />
       <CTA />
     </>
   );

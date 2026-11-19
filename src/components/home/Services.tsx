@@ -30,9 +30,8 @@ export default function Services() {
             <StaggerItem key={service.id}>
               <article className="group relative h-full overflow-hidden rounded-3xl border border-slate-900/5 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-2 hover:border-brand-primary/25 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60 dark:hover:border-brand-accent/30">
                 {/* Hover glow */}
-                <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-25" />
 
-                <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-500 group-hover:-rotate-6 group-hover:scale-110">
+                <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                   <service.icon className="h-7 w-7" />
                 </span>
 

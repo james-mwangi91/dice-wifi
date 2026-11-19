@@ -128,7 +128,7 @@ export default function Contact() {
                     rel={card.href.startsWith('http') ? 'noreferrer noopener' : undefined}
                     className="group flex items-center gap-5 rounded-3xl border border-slate-900/5 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand-primary/25 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60 dark:hover:border-brand-accent/30"
                   >
-                    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    <span className="inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                       <card.icon className="h-6 w-6" />
                     </span>
                     <div>
@@ -288,7 +288,7 @@ export default function Contact() {
                     <button
                       type="submit"
                       disabled={status === 'sending'}
-                      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-brand px-9 py-4 text-base font-semibold text-white shadow-glow transition-all duration-300 hover:brightness-110 disabled:opacity-60 sm:w-auto"
+                      className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-lime px-9 py-4 font-display text-base font-bold text-brand-dark transition-colors duration-200 hover:bg-[#B3E033] disabled:opacity-60 sm:w-auto"
                     >
                       {status === 'sending' ? (
                         <>

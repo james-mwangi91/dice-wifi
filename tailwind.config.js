@@ -5,27 +5,46 @@ export default {
   theme: {
     extend: {
       colors: {
+        /* Ink + paper + signal lime. `primary` is the readable forest green used
+           for text/icons on light surfaces; `accent`/`lime` is the signal colour
+           used as a fill (with ink text) or as text on dark surfaces. */
         brand: {
-          primary: '#2563EB',
-          secondary: '#0EA5E9',
-          accent: '#38BDF8',
-          dark: '#0F172A',
-          light: '#F8FAFC',
-          ink: '#334155',
+          primary: '#15633A',
+          secondary: '#1F8A4C',
+          accent: '#C5F04A',
+          lime: '#C5F04A',
+          dark: '#0C1310',
+          light: '#F4F1E8',
+          ink: '#2A302C',
+        },
+        /* Warm, faintly green-tinted neutrals replace Tailwind's cool slate so
+           every existing slate-* class picks up the new palette. */
+        slate: {
+          50: '#F7F6F1',
+          100: '#EEECE4',
+          200: '#DEDBD0',
+          300: '#C3C0B3',
+          400: '#97958A',
+          500: '#6E6D64',
+          600: '#52524B',
+          700: '#3C3D38',
+          800: '#252824',
+          900: '#161A17',
+          950: '#0C1310',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Sora', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['"Bricolage Grotesque"', 'Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         soft: '0 10px 40px -12px rgba(15, 23, 42, 0.12)',
-        glow: '0 0 40px -8px rgba(37, 99, 235, 0.45)',
+        glow: '0 12px 32px -12px rgba(21, 99, 58, 0.45)',
         card: '0 4px 24px -6px rgba(15, 23, 42, 0.08)',
       },
       backgroundImage: {
         'gradient-brand':
-          'linear-gradient(135deg, #2563EB 0%, #0EA5E9 55%, #38BDF8 100%)',
+          'linear-gradient(135deg, #15633A 0%, #1F8A4C 100%)',
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       keyframes: {

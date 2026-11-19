@@ -1,67 +1,38 @@
-import { motion } from 'framer-motion';
-import { ArrowRight, PhoneCall, Sparkles } from 'lucide-react';
+import { ArrowRight, MessageCircle } from 'lucide-react';
+import { BRAND } from '../../constants';
 import Button from '../ui/Button';
-import { fadeUp, stagger } from '../../animations/variants';
+import Reveal from '../ui/Reveal';
 
-/** Large centered CTA with animated gradient background */
+/** Closing call to action — a full lime slab */
 export default function CTA() {
   return (
-    <section className="relative overflow-hidden py-24 lg:py-36">
-      <div className="mx-auto max-w-5xl px-6 text-center lg:px-8">
-        <motion.div variants={stagger(0.15)} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
-          <motion.span
-            variants={fadeUp}
-            className="inline-flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 px-5 py-2 text-xs font-bold uppercase tracking-[0.18em] text-brand-primary dark:border-brand-accent/20 dark:bg-brand-accent/10 dark:text-brand-accent"
-          >
-            <Sparkles className="h-4 w-4" /> Get Started Today
-          </motion.span>
+    <section className="px-3 py-3 sm:px-4 sm:py-4">
+      <div className="relative overflow-hidden rounded-[2rem] bg-brand-lime px-6 py-20 text-brand-dark sm:rounded-[2.5rem] sm:px-12 lg:px-16 lg:py-28">
+        {/* Signal arcs echo the hero */}
+        <svg viewBox="0 0 400 400" className="pointer-events-none absolute -bottom-40 -right-24 h-[34rem] w-[34rem] opacity-[0.12]" aria-hidden="true">
+          {[60, 110, 160].map((r) => (
+            <circle key={r} cx="200" cy="200" r={r} fill="none" stroke="currentColor" strokeWidth="18" />
+          ))}
+          <circle cx="200" cy="200" r="22" fill="currentColor" />
+        </svg>
 
-          <motion.h2
-            variants={fadeUp}
-            className="mt-7 font-display text-4xl font-extrabold leading-tight tracking-tight text-brand-dark sm:text-5xl lg:text-6xl dark:text-white"
-          >
-            Ready to experience <span className="text-gradient">faster internet?</span>
-          </motion.h2>
-
-          <motion.p variants={fadeUp} className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-            Join thousands of happy homes and businesses on the fastest network in Nairobi.
-            Most installations are live within 48 hours.
-          </motion.p>
-
-          <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <Button to="/contact" size="lg" icon={<ArrowRight className="h-4 w-4" />}>
-              Join Today
+        <Reveal className="relative mx-auto max-w-7xl">
+          <h2 className="max-w-4xl font-display text-5xl font-extrabold leading-[0.95] tracking-[-0.035em] sm:text-6xl lg:text-8xl">
+            Stop refreshing. Start streaming.
+          </h2>
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-brand-dark/75">
+            Book an install today and you could be online by the weekend. No contracts, and a full refund in your first
+            30 days if we don&rsquo;t deliver.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
+            <Button to="/contact" variant="dark" size="lg" icon={<ArrowRight className="h-4 w-4" />}>
+              Book my installation
             </Button>
-            <Button to="/contact" variant="glass" size="lg" icon={<PhoneCall className="h-4 w-4" />}>
-              Contact Us
+            <Button href={BRAND.whatsappHref} variant="outline" size="lg" icon={<MessageCircle className="h-4 w-4" />} className="!border-brand-dark/25 !text-brand-dark hover:!border-brand-dark">
+              Chat on WhatsApp
             </Button>
-          </motion.div>
-
-          <motion.p variants={fadeUp} className="mt-8 text-xs font-semibold uppercase tracking-widest text-slate-400">
-            No contracts · Free cancellation · 30-day money-back guarantee
-          </motion.p>
-        </motion.div>
-      </div>
-
-      {/* Animated gradient background */}
-      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        <div className="absolute left-1/2 top-1/2 h-[34rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full opacity-60 dark:opacity-40">
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
-            className="absolute inset-[-40%] bg-[conic-gradient(from_0deg,transparent_0deg,#2563EB_90deg,transparent_180deg,#0EA5E9_270deg,transparent_360deg)] blur-2xl"
-          />
-        </div>
-        <motion.div
-          animate={{ y: [0, -24, 0], x: [0, 16, 0] }}
-          transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand-primary/15 blur-[90px]"
-        />
-        <motion.div
-          animate={{ y: [0, 20, 0], x: [0, -12, 0] }}
-          transition={{ duration: 13, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-brand-secondary/15 blur-[100px]"
-        />
+          </div>
+        </Reveal>
       </div>
     </section>
   );

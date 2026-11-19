@@ -1,5 +1,6 @@
 import PageHeader from '../components/ui/PageHeader';
 import Coverage from '../components/home/Coverage';
+import NetworkStatus from '../components/home/NetworkStatus';
 import CTA from '../components/home/CTA';
 import Reveal from '../components/ui/Reveal';
 
@@ -32,6 +33,7 @@ export default function CoveragePage() {
         </div>
       </section>
 
+      <NetworkStatus />
       <CTA />
     </>
   );

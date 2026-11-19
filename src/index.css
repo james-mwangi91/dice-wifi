@@ -38,7 +38,11 @@
   }
 
   ::selection {
-    @apply bg-brand-primary text-white;
+    @apply bg-brand-lime text-brand-dark;
+  }
+
+  h1, h2, h3 {
+    font-optical-sizing: auto;
   }
 
   /* Custom scrollbar */
@@ -50,7 +54,7 @@
     @apply bg-slate-100 dark:bg-slate-900;
   }
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-gradient-to-b from-brand-primary to-brand-secondary;
+    @apply rounded-full bg-slate-400 dark:bg-slate-700;
   }
 
   /* Accessible focus rings */
@@ -69,8 +73,25 @@
     @apply bg-white/85 backdrop-blur-2xl border border-white/70 dark:bg-slate-900/80 dark:border-slate-700/70;
   }
 
+  /* Signature highlight: ink text on a lime marker block. Reads on both light
+     and dark surfaces, so headings never need to know their background. */
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-primary via-brand-secondary to-brand-accent bg-clip-text text-transparent;
+    @apply bg-brand-lime text-brand-dark;
+    padding: 0 0.12em;
+    margin: 0 -0.04em;
+    border-radius: 0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  /* Small uppercase label used above section titles */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-[0.2em];
+  }
+
+  /* Pip divider — the dice motif, used between inline items */
+  .pip {
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-current;
   }
 
   .card-shadow {
@@ -80,15 +101,15 @@
   /* Dotted / grid pattern backgrounds */
   .bg-grid {
     background-image:
-      linear-gradient(to right, rgba(37, 99, 235, 0.07) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(37, 99, 235, 0.07) 1px, transparent 1px);
+      linear-gradient(to right, rgba(12, 19, 16, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(12, 19, 16, 0.05) 1px, transparent 1px);
     background-size: 44px 44px;
   }
 
   .dark .bg-grid {
     background-image:
-      linear-gradient(to right, rgba(56, 189, 248, 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(56, 189, 248, 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgba(197, 240, 74, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(197, 240, 74, 0.05) 1px, transparent 1px);
   }
 
   .bg-noise {
@@ -104,14 +125,6 @@
       rgba(255, 255, 255, 0) 100%
     );
     background-size: 200% 100%;
-  }
-}
-
-/* ---------- Custom cursor ---------- */
-@media (pointer: fine) {
-  .custom-cursor-active,
-  .custom-cursor-active * {
-    cursor: none !important;
   }
 }
 
@@ -132,7 +145,7 @@
   @apply bg-brand-primary/30 w-2 h-2;
 }
 .swiper-pagination-bullet-active {
-  @apply bg-gradient-to-r from-brand-primary to-brand-secondary w-6 rounded-full transition-all;
+  @apply bg-brand-primary w-6 rounded-full transition-all;
 }
 
 /* Hide scrollbars for horizontal scrollers */

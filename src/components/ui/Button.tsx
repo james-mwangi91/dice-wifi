@@ -10,7 +10,7 @@ interface Ripple {
   size: number;
 }
 
-type Variant = 'primary' | 'outline' | 'ghost' | 'glass' | 'light';
+type Variant = 'primary' | 'outline' | 'ghost' | 'glass' | 'light' | 'dark';
 type Size = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick' | 'className'> {
@@ -26,18 +26,19 @@ interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onC
 }
 
 const base =
-  'relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-semibold tracking-tight transition-colors duration-300 will-change-transform select-none disabled:opacity-60 disabled:pointer-events-none';
+  'relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-display font-bold tracking-tight transition-colors duration-200 will-change-transform select-none disabled:opacity-60 disabled:pointer-events-none';
 
 const variants: Record<Variant, string> = {
   primary:
-    'bg-gradient-brand text-white shadow-glow hover:brightness-110 active:brightness-95',
+    'bg-brand-lime text-brand-dark hover:bg-[#B3E033] active:bg-[#A6D22B]',
   outline:
-    'border-2 border-brand-primary/30 text-brand-primary hover:border-brand-primary hover:bg-brand-primary/5 dark:text-brand-accent dark:border-brand-accent/40 dark:hover:border-brand-accent',
+    'border-2 border-brand-dark/15 text-brand-dark hover:border-brand-dark hover:bg-brand-dark/5 dark:text-white dark:border-white/20 dark:hover:border-white',
   ghost:
     'text-brand-ink hover:bg-slate-900/5 dark:text-slate-200 dark:hover:bg-white/10',
   glass:
-    'glass text-brand-ink dark:text-slate-100 hover:border-brand-primary/40',
-  light: 'bg-white text-brand-dark shadow-soft hover:bg-brand-light',
+    'border-2 border-white/25 text-white hover:border-white hover:bg-white/10',
+  light: 'bg-white text-brand-dark hover:bg-brand-light',
+  dark: 'bg-brand-dark text-white hover:bg-black dark:bg-white dark:text-brand-dark dark:hover:bg-slate-100',
 };
 
 const sizes: Record<Size, string> = {
@@ -101,7 +102,7 @@ export default function Button({
       {ripples.map((r) => (
         <span
           key={r.id}
-          className="pointer-events-none absolute rounded-full bg-white/40 animate-ripple"
+          className="pointer-events-none absolute rounded-full bg-black/10 animate-ripple"
           style={{ left: r.x, top: r.y, width: r.size, height: r.size }}
         />
       ))}

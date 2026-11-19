@@ -1,6 +1,8 @@
 import { Gift, ShieldCheck, Wallet, Zap } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import Packages from '../components/home/Packages';
+import SpeedTest from '../components/home/SpeedTest';
+import FAQ from '../components/home/FAQ';
 import CTA from '../components/home/CTA';
 import { Stagger, StaggerItem } from '../components/ui/Reveal';
 
@@ -31,8 +33,8 @@ export default function PackagesPage() {
           <Stagger className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" gap={0.08}>
             {guarantees.map((g) => (
               <StaggerItem key={g.title}>
-                <div className="group h-full rounded-3xl border border-slate-900/5 bg-white p-7 text-center shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60">
-                  <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:scale-110">
+                <div className="group h-full rounded-3xl border border-slate-900/10 bg-white p-7 text-center transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-slate-900">
+                  <span className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                     <g.icon className="h-7 w-7" />
                   </span>
                   <h3 className="mt-5 font-display text-base font-bold text-brand-dark dark:text-white">{g.title}</h3>
@@ -44,6 +46,8 @@ export default function PackagesPage() {
         </div>
       </section>
 
+      <SpeedTest />
+      <FAQ />
       <CTA />
     </>
   );

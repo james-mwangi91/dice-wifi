@@ -76,7 +76,7 @@ export default function About() {
               {/* Mission */}
               <StaggerItem>
                 <div className="group h-full rounded-3xl border border-slate-900/5 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                     <Target className="h-6 w-6" />
                   </span>
                   <h3 className="mt-4 font-display text-lg font-bold text-brand-dark dark:text-white">Our Mission</h3>
@@ -89,7 +89,7 @@ export default function About() {
               {/* Vision */}
               <StaggerItem>
                 <div className="group h-full rounded-3xl border border-slate-900/5 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60">
-                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110">
+                  <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                     <Eye className="h-6 w-6" />
                   </span>
                   <h3 className="mt-4 font-display text-lg font-bold text-brand-dark dark:text-white">Our Vision</h3>
