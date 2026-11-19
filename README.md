@@ -70,3 +70,18 @@ src/
 
 Site copy lives in `src/constants/index.ts` — packages, pricing, coverage areas, FAQs and
 testimonials can all be edited there without touching components.
+
+## Hotspot site
+
+`hotspot/` is a separate single-page site for DICE Hotspot (pay-as-you-go WiFi
+bundles), with its own theme and dependencies. It deploys alongside the main site at
+`/dice-wifi/hotspot/`.
+
+```bash
+cd hotspot
+npm install
+npm run dev     # http://localhost:5174
+```
+
+Bundles, hero slides, hotspot areas and FAQs live in `hotspot/src/data.ts`.
+Hero photos come from Unsplash at up to 2400px wide, served via `srcset`.
