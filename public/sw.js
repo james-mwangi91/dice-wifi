@@ -3,7 +3,7 @@
    All paths are derived from the worker's own location so the same file works
    whether the app is served from a domain root or a sub-path (GitHub Pages). */
 
-const CACHE_NAME = 'dice-wifi-v2';
+const CACHE_NAME = 'dice-wifi-v3';
 
 /* '/sw.js' -> '/', '/dice-wifi/sw.js' -> '/dice-wifi/' */
 const BASE = self.location.pathname.replace(/sw\.js$/, '');
@@ -45,6 +45,10 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
+  /* The hotspot site is a separate app under this path; leave it alone so its
+     pages are never cached as this site's shell. */
+  if (url.pathname.startsWith(`${BASE}hotspot/`)) return;
 
   /* Navigations: network first, fall back to the cached shell when offline */
   if (request.mode === 'navigate') {

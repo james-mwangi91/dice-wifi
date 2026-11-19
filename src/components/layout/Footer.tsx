@@ -98,6 +98,13 @@ export default function Footer() {
                   Coverage areas
                 </Link>
               </li>
+              <li>
+                {/* Separate single-page app deployed beside this one */}
+                <a href={`${import.meta.env.BASE_URL}hotspot/`} className="inline-flex items-center gap-1.5 transition-colors hover:text-brand-accent">
+                  <span className="rounded-md bg-white/5 px-1.5 py-0.5 text-[11px] font-bold text-brand-accent">KES 10</span>
+                  Hotspot WiFi
+                </a>
+              </li>
             </ul>
           </nav>
 
