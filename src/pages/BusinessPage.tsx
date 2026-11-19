@@ -1,4 +1,4 @@
-import { ArrowRight, Building2, Check, Headset, LayoutGrid, School, Store, Wifi } from 'lucide-react';
+import { ArrowRight, Building2, Check, LayoutGrid, School, Store } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import BusinessSection from '../components/home/BusinessSection';
 import CTA from '../components/home/CTA';
@@ -53,8 +53,8 @@ export default function BusinessPage() {
       <section className="relative overflow-hidden py-24 lg:py-32">
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <Reveal className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-primary dark:bg-brand-accent/10 dark:text-brand-accent">
-              <Wifi className="h-4 w-4" /> Built For Every Business
+            <span className="eyebrow text-brand-primary dark:text-brand-lime">
+              <span className="pip" /> Built For Every Business
             </span>
             <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-brand-dark sm:text-4xl lg:text-5xl dark:text-white">
               One network. <span className="text-gradient">Every use case.</span>
@@ -64,9 +64,8 @@ export default function BusinessPage() {
           <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4" gap={0.08}>
             {segments.map((s) => (
               <StaggerItem key={s.title}>
-                <div className="group relative h-full overflow-hidden rounded-3xl border border-slate-900/5 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60">
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-brand opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-20" />
-                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:-rotate-6 group-hover:scale-110">
+                <div className="group relative h-full overflow-hidden rounded-3xl border border-slate-900/10 bg-white p-7 transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-slate-900">
+                  <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                     <s.icon className="h-7 w-7" />
                   </span>
                   <h3 className="mt-5 font-display text-lg font-bold text-brand-dark dark:text-white">{s.title}</h3>
@@ -83,8 +82,8 @@ export default function BusinessPage() {
         <div className="absolute inset-0 bg-grid opacity-40" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <Reveal className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-primary dark:bg-brand-accent/10 dark:text-brand-accent">
-              <Headset className="h-4 w-4" /> How It Works
+            <span className="eyebrow text-brand-primary dark:text-brand-lime">
+              <span className="pip" /> How It Works
             </span>
             <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-brand-dark sm:text-4xl dark:text-white">
               From survey to <span className="text-gradient">sign-off</span> — in four steps
@@ -96,8 +95,8 @@ export default function BusinessPage() {
             <Stagger className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4" gap={0.1}>
               {process.map((p) => (
                 <StaggerItem key={p.step}>
-                  <div className="relative rounded-3xl border border-slate-900/5 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60">
-                    <span className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-brand font-display text-lg font-extrabold text-white shadow-glow">
+                  <div className="relative rounded-3xl border border-slate-900/10 bg-white p-7 dark:border-white/10 dark:bg-slate-900">
+                    <span className="relative z-10 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-lime font-display text-lg font-extrabold text-brand-dark">
                       {p.step}
                     </span>
                     <h3 className="mt-5 font-display text-lg font-bold text-brand-dark dark:text-white">{p.title}</h3>
@@ -112,7 +111,7 @@ export default function BusinessPage() {
             <Button to="/contact" size="lg" icon={<ArrowRight className="h-4 w-4" />}>
               Request a Site Survey
             </Button>
-            <Button to="/packages" variant="glass" size="lg" icon={<Check className="h-4 w-4" />}>
+            <Button to="/packages" variant="outline" size="lg" icon={<Check className="h-4 w-4" />}>
               View Business Package
             </Button>
           </Reveal>

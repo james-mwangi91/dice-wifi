@@ -277,8 +277,8 @@ export default function SpeedTest() {
 
           <div className="glass-strong overflow-hidden rounded-[2.5rem] p-8 shadow-soft sm:p-12">
             <div className="text-center">
-              <span className="inline-flex items-center gap-2 rounded-full bg-brand-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-primary dark:bg-brand-accent/10 dark:text-brand-accent">
-                <Gauge className="h-4 w-4" /> Speed Test
+              <span className="eyebrow text-brand-primary dark:text-brand-lime">
+              <span className="pip" /> Speed Test
               </span>
               <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-brand-dark dark:text-white sm:text-4xl">
                 How fast is your internet <span className="text-gradient">right now?</span>
@@ -431,7 +431,7 @@ export default function SpeedTest() {
             {/* Action */}
             <div className="mt-10 text-center">
               {isDone || isError ? (
-                <Button variant="glass" onClick={retest} icon={<RefreshCw className="h-4 w-4" />}>
+                <Button variant="outline" onClick={retest} icon={<RefreshCw className="h-4 w-4" />}>
                   Test Again
                 </Button>
               ) : (

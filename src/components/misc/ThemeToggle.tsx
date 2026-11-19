@@ -1,35 +1,35 @@
 import { motion } from 'framer-motion';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
+import { cn } from '../../utils/cn';
 
-/** Animated light/dark theme switcher */
-export default function ThemeToggle({ className }: { className?: string }) {
+/** Light/dark theme switcher. `onDark` styles it for the transparent nav over a dark header. */
+export default function ThemeToggle({ className, onDark = false }: { className?: string; onDark?: boolean }) {
   const { theme, toggle } = useTheme();
   const isDark = theme === 'dark';
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={toggle}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-      whileTap={{ scale: 0.88 }}
-      whileHover={{ scale: 1.08 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 18 }}
-      className={`relative inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-300 ${
-        isDark
-          ? 'border-white/15 bg-white/10 text-amber-300 hover:bg-white/20'
-          : 'border-slate-900/10 bg-white/80 text-brand-primary shadow-card hover:bg-white'
-      } ${className ?? ''}`}
+      className={cn(
+        'relative inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-200',
+        onDark
+          ? 'border-white/20 text-white hover:bg-white/10'
+          : 'border-slate-900/15 text-brand-dark hover:bg-slate-900/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10',
+        className
+      )}
     >
       <motion.span
         key={theme}
-        initial={{ rotate: -120, scale: 0, opacity: 0 }}
+        initial={{ rotate: -90, scale: 0.4, opacity: 0 }}
         animate={{ rotate: 0, scale: 1, opacity: 1 }}
-        transition={{ type: 'spring', stiffness: 260, damping: 16 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
         className="inline-flex"
       >
-        {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+        {isDark ? <Moon className="h-[18px] w-[18px]" /> : <Sun className="h-[18px] w-[18px]" />}
       </motion.span>
-    </motion.button>
+    </button>
   );
 }

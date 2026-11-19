@@ -1,6 +1,7 @@
 import { Activity, Award, Building2, Handshake, Leaf, Rocket } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import About from '../components/home/About';
+import Services from '../components/home/Services';
 import WhyChooseUs from '../components/home/WhyChooseUs';
 import CTA from '../components/home/CTA';
 import Reveal, { Stagger, StaggerItem } from '../components/ui/Reveal';
@@ -34,8 +35,8 @@ export default function AboutPage() {
         <div className="absolute inset-0 bg-grid opacity-40" aria-hidden="true" />
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
           <Reveal className="text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-brand-primary dark:bg-brand-accent/10 dark:text-brand-accent">
-              <Leaf className="h-4 w-4" /> Our Journey
+            <span className="eyebrow text-brand-primary dark:text-brand-lime">
+              <span className="pip" /> Our Journey
             </span>
             <h2 className="mt-5 font-display text-3xl font-extrabold tracking-tight text-brand-dark sm:text-4xl dark:text-white">
               Milestones that <span className="text-gradient">matter</span>
@@ -45,9 +46,9 @@ export default function AboutPage() {
           <Stagger className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" gap={0.08}>
             {milestones.map((m) => (
               <StaggerItem key={m.year}>
-                <div className="group relative h-full overflow-hidden rounded-3xl border border-slate-900/5 bg-white p-7 shadow-card transition-all duration-300 hover:-translate-y-2 hover:shadow-soft dark:border-white/10 dark:bg-slate-900/60">
+                <div className="group relative h-full overflow-hidden rounded-3xl border border-slate-900/10 bg-white p-7 transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-slate-900">
                   <div className="flex items-center justify-between">
-                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand text-white shadow-glow transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-dark text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
                       <m.icon className="h-6 w-6" />
                     </span>
                     <span className="font-display text-sm font-extrabold text-brand-primary/40 dark:text-brand-accent/40">{m.year}</span>
@@ -61,6 +62,7 @@ export default function AboutPage() {
         </div>
       </section>
 
+      <Services />
       <WhyChooseUs />
       <CTA />
     </>

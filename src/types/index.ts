@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
 
-/** Navigation link pointing to a section id */
+/** Navigation link pointing to a route */
 export interface NavLink {
   label: string;
   href: string;
@@ -41,7 +41,6 @@ export interface Testimonial {
   role: string;
   quote: string;
   rating: number;
-  avatar: string;
 }
 
 /** FAQ item */

@@ -1,229 +1,225 @@
-import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, type FormEvent } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowRight, ChevronDown, Wifi } from 'lucide-react';
-import { HERO_STATS } from '../../constants';
+import { ArrowRight, Check, MapPin } from 'lucide-react';
+import { COVERAGE_AREAS, HERO_STATS, PACKAGES } from '../../constants';
 import Button from '../ui/Button';
 import CountUpNumber from '../ui/CountUp';
 import { fadeUp, stagger } from '../../animations/variants';
-import { navigateToSection } from '../../utils/scroll';
 import { cn } from '../../utils/cn';
 
-/** Carousel slides for the hero visual */
-const HERO_SLIDES = [
-  {
-    src: 'https://images.unsplash.com/photo-1554415707-6e8cfc93fe23?auto=format&fit=crop&w=1400&q=80',
-    alt: 'Family relaxing together while streaming and browsing on their devices',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&w=1400&q=80',
-    alt: 'Modern WiFi router keeping a home connected',
-  },
-  {
-    src: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1400&q=80',
-    alt: 'High-speed network connecting people around the world',
-  },
-];
+const liveAreas = COVERAGE_AREAS.filter((a) => a.status === 'live').map((a) => a.name);
 
-/** Hero visual — D-shaped carousel of ISP imagery with a smooth crossfade */
-function NetworkVisual() {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused) return;
-    const timer = setInterval(() => setIndex((i) => (i + 1) % HERO_SLIDES.length), 5000);
-    return () => clearInterval(timer);
-  }, [paused]);
+/** Interactive plan picker — the hero's visual is the product itself */
+function PlanPicker() {
+  const [selected, setSelected] = useState(() => Math.max(0, PACKAGES.findIndex((p) => p.featured)));
+  const plan = PACKAGES[selected];
+  const speedNumber = plan.speed.replace(/\D/g, '');
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.92 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className="relative mx-auto w-full max-w-xl"
+      initial={{ opacity: 0, y: 32 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+      className="relative w-full rounded-[2rem] bg-brand-light p-6 text-brand-dark shadow-[0_40px_80px_-30px_rgba(0,0,0,0.6)] sm:p-8 dark:bg-slate-900 dark:text-white"
     >
-      {/* Glow */}
-      <div className="absolute inset-0 -z-10 rounded-full bg-brand-primary/25 blur-[90px]" />
+      <div className="flex items-center justify-between">
+        <p className="eyebrow text-slate-500 dark:text-slate-400">
+          <span className="pip" /> Pick your speed
+        </p>
+        {plan.badge && (
+          <span className="rounded-full bg-brand-dark px-3 py-1 font-display text-[11px] font-bold uppercase tracking-wider text-brand-lime dark:bg-brand-lime dark:text-brand-dark">
+            {plan.badge}
+          </span>
+        )}
+      </div>
 
-      {/* D-shaped carousel */}
-      <div
-        role="group"
-        aria-roledescription="carousel"
-        aria-label="What DICE WiFi does"
-        className="relative overflow-hidden rounded-r-[13rem] shadow-soft ring-1 ring-white/15 sm:rounded-r-[15rem]"
-        onMouseEnter={() => setPaused(true)}
-        onMouseLeave={() => setPaused(false)}
-      >
-        <div className="relative h-[26rem] w-full sm:h-[30rem]">
-          <AnimatePresence>
-            {HERO_SLIDES.map(
-              (slide, i) =>
-                i === index && (
-                  <motion.img
-                    key={slide.src}
-                    src={slide.src}
-                    alt={slide.alt}
-                    loading="eager"
-                    initial={{ opacity: 0, scale: 1.06 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ opacity: { duration: 1.4, ease: 'easeInOut' }, scale: { duration: 1.4, ease: 'easeInOut' } }}
-                    className="absolute inset-0 h-full w-full object-cover"
-                  />
-                )
+      {/* Speed tabs */}
+      <div role="tablist" aria-label="Internet plans" className="mt-5 grid grid-cols-4 gap-1.5 rounded-2xl bg-slate-200/70 p-1.5 dark:bg-white/5">
+        {PACKAGES.map((p, i) => (
+          <button
+            key={p.id}
+            type="button"
+            role="tab"
+            aria-selected={i === selected}
+            aria-controls="plan-panel"
+            onClick={() => setSelected(i)}
+            className={cn(
+              'relative rounded-xl px-1 py-2.5 font-display text-sm font-bold transition-colors',
+              i === selected ? 'text-brand-dark' : 'text-slate-500 hover:text-brand-dark dark:text-slate-400 dark:hover:text-white'
             )}
-          </AnimatePresence>
-        </div>
+          >
+            {i === selected && (
+              <motion.span
+                layoutId="plan-tab"
+                className="absolute inset-0 rounded-xl bg-brand-lime"
+                transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+              />
+            )}
+            <span className="relative">{p.speed.replace(' Mbps', '')}<span className="text-[10px] font-semibold opacity-70"> Mb</span></span>
+          </button>
+        ))}
+      </div>
 
-        {/* Soft bottom blend into the hero background */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brand-dark/80 to-transparent" />
+      <div id="plan-panel" role="tabpanel" aria-live="polite" className="mt-7">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={plan.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+          >
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="font-display text-sm font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">{plan.name}</p>
+                <p className="font-display text-7xl font-extrabold leading-none tracking-[-0.035em] sm:text-8xl">
+                  {speedNumber}
+                  <span className="ml-1 text-2xl font-bold tracking-tight text-slate-500 dark:text-slate-400">Mbps</span>
+                </p>
+              </div>
+              <div className="pb-2 text-right">
+                <p className="font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+                  <span className="text-sm font-bold text-slate-500 dark:text-slate-400">KES </span>
+                  {plan.price.toLocaleString('en-KE')}
+                </p>
+                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400">per month</p>
+              </div>
+            </div>
 
-        {/* Slide indicators */}
-        <div className="absolute bottom-5 left-6 flex items-center gap-2.5">
-          {HERO_SLIDES.map((slide, i) => (
-            <button
-              key={slide.src}
-              type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`Show slide ${i + 1} of ${HERO_SLIDES.length}`}
-              className={cn(
-                'h-2.5 rounded-full transition-all duration-500',
-                i === index ? 'w-7 bg-brand-accent shadow-glow' : 'w-2.5 bg-white/40 hover:bg-white/80'
-              )}
-            />
-          ))}
-        </div>
+            <p className="mt-5 text-sm leading-relaxed text-slate-600 dark:text-slate-300">{plan.tagline}</p>
+
+            <ul className="mt-5 grid gap-2.5 border-t border-slate-900/10 pt-5 sm:grid-cols-2 dark:border-white/10">
+              {plan.features.slice(0, 4).map((f) => (
+                <li key={f} className="flex items-start gap-2 text-sm font-medium">
+                  <Check className="mt-0.5 h-4 w-4 shrink-0 text-brand-primary dark:text-brand-lime" strokeWidth={3} />
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="mt-7">
+        <Button to="/contact" variant="dark" fullWidth size="lg" icon={<ArrowRight className="h-4 w-4" />}>
+          Get {plan.name}
+        </Button>
       </div>
     </motion.div>
   );
 }
 
-/** Full-viewport hero with stats and animated network visual */
+/** Full-viewport hero: big promise, area check, live plan picker, proof strip */
 export default function Hero() {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [area, setArea] = useState('');
+
+  const checkArea = (e: FormEvent) => {
+    e.preventDefault();
+    const q = area.trim();
+    navigate(q ? `/coverage?q=${encodeURIComponent(q)}` : '/coverage');
+  };
 
   return (
-    <section id="home" className="relative flex min-h-screen items-center overflow-hidden bg-brand-dark">
-      {/* Background image + overlays */}
-      <div className="absolute inset-0" aria-hidden="true">
-        <img
-          src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1920&q=80"
-          alt=""
-          loading="eager"
-          fetchPriority="high"
-          className="h-full w-full object-cover opacity-40"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-brand-dark via-brand-dark/90 to-brand-primary/40" />
-        <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-brand-dark/60" />
-        <div className="absolute inset-0 bg-grid opacity-50" />
-        <div className="absolute inset-0 bg-noise" />
-        {/* Floating gradient orbs */}
-        <motion.div
-          animate={{ y: [0, -30, 0], x: [0, 20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute -left-32 top-1/4 h-96 w-96 rounded-full bg-brand-primary/30 blur-[120px]"
-        />
-        <motion.div
-          animate={{ y: [0, 24, 0], x: [0, -16, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-          className="absolute -right-24 bottom-10 h-[28rem] w-[28rem] rounded-full bg-brand-secondary/25 blur-[130px]"
-        />
-      </div>
+    <section id="home" className="relative overflow-hidden bg-brand-dark text-white">
+      {/* Signal arcs — the one decorative element */}
+      <svg
+        viewBox="0 0 800 800"
+        className="pointer-events-none absolute -right-64 top-1/2 h-[64rem] w-[64rem] -translate-y-1/2 text-brand-lime opacity-[0.07]"
+        aria-hidden="true"
+      >
+        {[120, 220, 320, 420, 520].map((r) => (
+          <circle key={r} cx="400" cy="400" r={r} fill="none" stroke="currentColor" strokeWidth="28" />
+        ))}
+      </svg>
 
-      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-16 px-6 pb-24 pt-32 lg:grid-cols-2 lg:px-8 lg:pt-36">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-14 px-5 pb-16 pt-32 sm:px-6 lg:grid-cols-12 lg:gap-12 lg:px-8 lg:pb-20 lg:pt-40">
         {/* Copy */}
-        <motion.div variants={stagger(0.14)} initial="hidden" animate="visible">
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-slate-200 backdrop-blur">
-            <Wifi className="h-4 w-4 text-brand-accent" />
-            Nairobi&rsquo;s Premium Internet Provider
+        <motion.div className="lg:col-span-7" variants={stagger(0.1)} initial="hidden" animate="visible">
+          <motion.p variants={fadeUp} className="eyebrow text-brand-lime">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 animate-ping-soft" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+              <span className="absolute inline-flex h-full w-full rounded-full bg-brand-lime animate-ping-soft" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-lime" />
             </span>
-          </motion.div>
+            Live in {liveAreas.length} towns across Nairobi
+          </motion.p>
 
           <motion.h1
             variants={fadeUp}
-            className="mt-7 font-display text-4xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-6xl lg:text-[4.25rem]"
+            className="mt-6 font-display text-[3.25rem] font-extrabold leading-[0.95] tracking-[-0.035em] sm:text-7xl lg:text-[5.75rem]"
           >
-            Lightning Fast
-            <br />
-            Internet for{' '}
-            <span className="relative inline-block">
-              <span className="text-gradient">Home &amp; Business</span>
-              <motion.svg viewBox="0 0 300 14" className="absolute -bottom-2 left-0 w-full" aria-hidden="true">
-                <motion.path
-                  d="M4 10 C 80 3, 220 3, 296 9"
-                  stroke="url(#hero-underline)"
-                  strokeWidth="5"
-                  strokeLinecap="round"
-                  fill="none"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
-                  transition={{ duration: 0.9, delay: 1.2, ease: 'easeOut' }}
-                />
-                <defs>
-                  <linearGradient id="hero-underline" x1="0" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
-                    <stop stopColor="#2563EB" />
-                    <stop offset="1" stopColor="#38BDF8" />
-                  </linearGradient>
-                </defs>
-              </motion.svg>
-            </span>
+            Internet that keeps up with <span className="text-gradient">Nairobi.</span>
           </motion.h1>
 
-          <motion.p variants={fadeUp} className="mt-7 max-w-xl text-lg leading-relaxed text-slate-300">
-            Experience seamless streaming, gaming, remote work and business connectivity with
-            reliable high-speed internet — backed by 99.9% uptime and 24/7 support.
+          <motion.p variants={fadeUp} className="mt-7 max-w-xl text-lg leading-relaxed text-slate-300 sm:text-xl">
+            Unlimited fibre for homes and businesses from{' '}
+            <strong className="font-semibold text-white">KES 1,500 a month</strong>. No data caps, no contracts —
+            and most homes are online within 48 hours.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-4">
-            <Button to="/contact" size="lg" icon={<ArrowRight className="h-4 w-4" />}>
-              Get Connected
-            </Button>
-            <Button
-              size="lg"
-              variant="glass"
-              onClick={() => navigateToSection('packages', pathname, navigate)}
-            >
-              View Packages
-            </Button>
-          </motion.div>
-
-          {/* Stats */}
-          <motion.dl variants={fadeUp} className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-4">
-            {HERO_STATS.map((stat) => (
-              <div key={stat.label}>
-                <dt className="order-2 mt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">{stat.label}</dt>
-                <dd className="order-1 font-display text-3xl font-extrabold text-white">
-                  <CountUpNumber end={stat.value} decimals={stat.decimals ?? 0} suffix={stat.suffix} duration={2.4} />
-                </dd>
+          {/* Area check */}
+          <motion.form variants={fadeUp} onSubmit={checkArea} className="mt-9 max-w-xl">
+            <label htmlFor="hero-area" className="mb-2.5 block font-display text-sm font-bold text-white/80">
+              Is DICE in your area?
+            </label>
+            <div className="flex flex-col gap-2 rounded-[1.75rem] border border-white/15 bg-white/5 p-2 transition-colors focus-within:border-brand-lime sm:flex-row sm:rounded-full">
+              <div className="flex flex-1 items-center">
+                <MapPin className="ml-3 h-5 w-5 shrink-0 text-white/50" />
+                <input
+                  id="hero-area"
+                  type="text"
+                  value={area}
+                  onChange={(e) => setArea(e.target.value)}
+                  placeholder="Your estate or town, e.g. Ruiru"
+                  autoComplete="address-level2"
+                  className="w-full bg-transparent px-3 py-3 text-base text-white placeholder:text-white/40 focus:outline-none"
+                />
               </div>
-            ))}
-          </motion.dl>
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-lime px-6 py-3 font-display text-sm font-bold text-brand-dark transition-colors hover:bg-[#B3E033]"
+              >
+                Check coverage <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mt-3 text-sm text-white/50">
+              Or{' '}
+              <a href="#packages" className="font-semibold text-white underline decoration-brand-lime decoration-2 underline-offset-4 hover:text-brand-lime">
+                compare all plans
+              </a>
+            </p>
+          </motion.form>
         </motion.div>
 
-        {/* Visual */}
-        <NetworkVisual />
+        {/* Plan picker */}
+        <div className="lg:col-span-5">
+          <PlanPicker />
+        </div>
       </div>
 
-      {/* Scroll cue */}
-      <motion.a
-        href="#about"
-        onClick={(e) => {
-          e.preventDefault();
-          navigateToSection('about', pathname, navigate);
-        }}
-        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-slate-400 transition-colors hover:text-brand-accent lg:flex"
-        aria-label="Scroll to About section"
-      >
-        <span className="text-[10px] font-bold uppercase tracking-[0.3em]">Scroll</span>
-        <motion.span animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}>
-          <ChevronDown className="h-5 w-5" />
-        </motion.span>
-      </motion.a>
+      {/* Proof strip */}
+      <div className="relative border-t border-white/10">
+        <dl className="mx-auto grid max-w-7xl grid-cols-2 px-5 sm:px-6 lg:grid-cols-4 lg:px-8">
+          {HERO_STATS.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={cn(
+                'flex flex-col-reverse gap-1 py-7 lg:py-9',
+                i % 2 === 1 && 'border-l border-white/10 pl-6',
+                i >= 2 && 'border-t border-white/10 lg:border-t-0',
+                i === 2 && 'lg:border-l lg:border-white/10 lg:pl-6',
+                i === 3 && 'lg:pl-6'
+              )}
+            >
+              <dt className="text-sm text-slate-400">{stat.label}</dt>
+              <dd className="font-display text-4xl font-extrabold tracking-tight text-white lg:text-5xl">
+                <CountUpNumber end={stat.value} decimals={stat.decimals ?? 0} suffix={stat.suffix} duration={2} />
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
     </section>
   );
 }

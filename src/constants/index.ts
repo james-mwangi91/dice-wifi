@@ -49,14 +49,14 @@ export const BRAND = {
 /* Navigation                                                          */
 /* ------------------------------------------------------------------ */
 
+/* Each entry is a route; the site has a real page for every section. */
 export const NAV_LINKS: NavLink[] = [
-  { label: 'About', href: 'about' },
-  { label: 'Packages', href: 'packages' },
-  { label: 'Coverage', href: 'coverage' },
-  { label: 'Business', href: 'business' },
-  { label: 'Testimonials', href: 'testimonials' },
-  { label: 'FAQ', href: 'faq' },
-  { label: 'Contact', href: 'contact' },
+  { label: 'Plans', href: '/packages' },
+  { label: 'Coverage', href: '/coverage' },
+  { label: 'Business', href: '/business' },
+  { label: 'About', href: '/about' },
+  { label: 'Reviews', href: '/testimonials' },
+  { label: 'FAQ', href: '/faq' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -64,10 +64,10 @@ export const NAV_LINKS: NavLink[] = [
 /* ------------------------------------------------------------------ */
 
 export const HERO_STATS = [
-  { label: 'Uptime', value: 99.9, decimals: 1, suffix: '%' },
-  { label: 'Customers', value: 5000, suffix: '+' },
-  { label: 'Support', value: 24, suffix: '/7' },
-  { label: 'Coverage', value: 100, suffix: '+ Km' },
+  { label: 'Network uptime', value: 99.9, decimals: 1, suffix: '%' },
+  { label: 'Homes & businesses connected', value: 5000, suffix: '+' },
+  { label: 'Typical install time', value: 48, suffix: ' hrs' },
+  { label: 'Local support, every day', value: 24, suffix: '/7' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -214,10 +214,10 @@ export const PACKAGE_COMPARE_ROWS = [
 export const COVERAGE_AREAS: CoverageArea[] = [
   { name: 'Nairobi', x: 36, y: 46, status: 'live' },
   { name: 'Kiambu', x: 27, y: 31, status: 'live' },
-  { name: 'Ruiru', x: 45, y: 29, status: 'live' },
+  { name: 'Ruiru', x: 47, y: 27, status: 'live' },
   { name: 'Thika', x: 60, y: 23, status: 'live' },
   { name: 'Juja', x: 51, y: 17, status: 'live' },
-  { name: 'Kahawa', x: 42, y: 36, status: 'live' },
+  { name: 'Kahawa', x: 38, y: 36, status: 'live' },
   { name: 'Syokimau', x: 38, y: 60, status: 'expanding' },
   { name: 'Kitengela', x: 44, y: 70, status: 'expanding' },
 ];
@@ -325,7 +325,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'I run three video calls a day and stream 4K at night. DICE WiFi has not dropped a single call since installation. The 40 Mbps Premium plan is a total game changer.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
   },
   {
     id: 2,
@@ -334,7 +333,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Ping dropped from 60ms to 8ms. I now play ranked matches without a single complaint from my teammates. Best decision I made this year.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
   },
   {
     id: 3,
@@ -343,7 +341,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'We run POS, CCTV and customer WiFi all on the Business plan. DICE engineers set everything up in one afternoon. Zero downtime in 8 months.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/women/68.jpg',
   },
   {
     id: 4,
@@ -352,7 +349,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Upload speeds matter to me more than downloads. DICE gives me real symmetric speeds that my old provider only advertised. Fantastic value.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
   },
   {
     id: 5,
@@ -361,7 +357,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Kids stream, I work from home, and my husband games — all at once, smoothly. Installation was quick and the team was so professional.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/women/12.jpg',
   },
   {
     id: 6,
@@ -370,7 +365,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'We moved our whole office to DICE. Their dedicated support line answers in minutes and they proactively monitor our connection.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/men/41.jpg',
   },
   {
     id: 7,
@@ -379,7 +373,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'I installed DICE in my apartment block and the tenants are thrilled. The hotspot solution pays for itself through the service charge.',
     rating: 4,
-    avatar: 'https://randomuser.me/api/portraits/women/90.jpg',
   },
   {
     id: 8,
@@ -388,7 +381,6 @@ export const TESTIMONIALS: Testimonial[] = [
     quote:
       'Our tracking system never goes offline. That reliability alone saves us thousands every month. DICE is the partner we needed.',
     rating: 5,
-    avatar: 'https://randomuser.me/api/portraits/men/22.jpg',
   },
 ];
 
