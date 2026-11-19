@@ -9,12 +9,12 @@ export default function FAQ() {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="faq" className="bg-white py-24 lg:py-32">
+    <section id="faq" className="bg-card py-24 lg:py-32">
       <div className="container-x grid gap-12 lg:grid-cols-12">
         <Reveal className="lg:col-span-4">
           <span className="eyebrow">FAQ</span>
           <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl">Quick answers.</h2>
-          <p className="mt-5 text-lg text-night/70">Stuck on the WiFi page? We reply on WhatsApp within minutes.</p>
+          <p className="mt-5 text-lg text-ink/70">Stuck on the WiFi page? We reply on WhatsApp within minutes.</p>
           <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="btn mt-8 bg-[#25D366] text-night hover:brightness-95">
             <MessageCircle className="h-4 w-4" /> WhatsApp support
           </a>
@@ -24,7 +24,7 @@ export default function FAQ() {
           {FAQS.map((f, i) => {
             const isOpen = open === i;
             return (
-              <div key={f.q} className={'rounded-[1.5rem] transition-colors ' + (isOpen ? 'bg-cream' : 'bg-cream/50 hover:bg-cream')}>
+              <div key={f.q} className={'rounded-[1.5rem] transition-colors ' + (isOpen ? 'bg-surface' : 'bg-surface/50 hover:bg-surface')}>
                 <h3>
                   <button
                     type="button"
@@ -39,7 +39,7 @@ export default function FAQ() {
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       className={
                         'inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full ' +
-                        (isOpen ? 'bg-coral text-white' : 'bg-white text-night')
+                        (isOpen ? 'bg-coral text-white' : 'bg-card text-ink')
                       }
                     >
                       <Plus className="h-4 w-4" />
@@ -58,7 +58,7 @@ export default function FAQ() {
                       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="px-6 pb-6 leading-relaxed text-night/70">{f.a}</p>
+                      <p className="px-6 pb-6 leading-relaxed text-ink/70">{f.a}</p>
                     </motion.div>
                   )}
                 </AnimatePresence>

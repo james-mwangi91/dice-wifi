@@ -11,7 +11,7 @@ export default function Logo({ light = false }: { light?: boolean }) {
         <circle cx="32" cy="42" r="4" fill="#1E0B3A" />
         <circle cx="48" cy="16" r="5" fill="#FFC83D" />
       </svg>
-      <span className={'font-display text-xl font-black leading-none tracking-tight ' + (light ? 'text-white' : 'text-night')}>
+      <span className={'font-display text-xl font-black leading-none tracking-tight ' + (light ? 'text-white' : 'text-ink')}>
         DICE<span className="text-coral"> Hotspot</span>
       </span>
     </span>
