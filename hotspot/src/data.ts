@@ -25,42 +25,55 @@ export function unsplash(id: string, w: number, h: number, q = 80) {
   return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&crop=faces,center&w=${w}&h=${h}&q=${q}`;
 }
 
-/** srcset for a fixed aspect ratio, up to 2400px wide for sharp retina screens */
-export function unsplashSet(id: string, ratio: number) {
-  return [800, 1200, 1600, 2400].map((w) => `${unsplash(id, w, Math.round(w / ratio))} ${w}w`).join(', ');
+/** srcset for a fixed aspect ratio. Defaults go up to 2400px for sharp retina screens. */
+export function unsplashSet(id: string, ratio: number, widths = [800, 1200, 1600, 2400], q = 80) {
+  return widths.map((w) => `${unsplash(id, w, Math.round(w / ratio), q)} ${w}w`).join(', ');
 }
+
+/** Full-bleed hero backgrounds: 16:9 up to 3200px wide (crisp on 1440px retina), 9:16 portrait for phones */
+export const HERO_DESKTOP_WIDTHS = [1280, 1920, 2560, 3200];
+export const HERO_MOBILE_WIDTHS = [720, 1080, 1440];
 
 export interface Slide {
   id: string;
   alt: string;
   tag: string;
   caption: string;
+  /** CSS object-position on wide screens — keeps the subject clear of the text column */
+  pos: string;
+  /** Mirror the photo so its subject faces into the frame, away from the text */
+  flip?: boolean;
 }
 
 export const HERO_SLIDES: Slide[] = [
+  {
+    id: '1611348524140-53c9a25263d6',
+    alt: 'Nairobi skyline at golden hour',
+    tag: 'Live across Nairobi',
+    caption: 'From the CBD to Juja — look for “DICE Hotspot” in your WiFi list.',
+    pos: '70% 45%',
+  },
   {
     id: '1522529599102-193c0d76b5b6',
     alt: 'Smiling young man outdoors on a sunny day',
     tag: 'From KES 10',
     caption: 'An hour online costs less than a mandazi.',
+    pos: '50% 30%',
+    flip: true,
   },
   {
-    id: '1607748862156-7c548e7e98f4',
-    alt: 'Group of friends laughing together on a staircase',
-    tag: 'Stream together',
-    caption: 'Unlimited data, so nobody has to ration the playlist.',
+    id: '1531482615713-2afd69097998',
+    alt: 'Two young professionals working together at a laptop',
+    tag: 'Work anywhere',
+    caption: 'Cafés, hostels and estates — your office is wherever the signal is.',
+    pos: '75% 40%',
   },
   {
     id: '1563986768609-322da13575f3',
-    alt: 'Person working on a laptop and phone in a café',
-    tag: 'Work anywhere',
-    caption: 'Cafés, stages and estates — your office is wherever the signal is.',
-  },
-  {
-    id: '1531384441138-2736e62e0919',
-    alt: 'Smiling man in glasses and a beret',
+    alt: 'Person using a phone and laptop in a café',
     tag: 'Pay with M-Pesa',
     caption: 'Pay, get your code by SMS, and you are on in seconds.',
+    pos: '70% 50%',
   },
 ];
 

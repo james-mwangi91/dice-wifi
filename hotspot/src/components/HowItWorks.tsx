@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useInView, useReducedMotion } from 'framer-motion';
 import { CheckCircle2, Lock, Wifi } from 'lucide-react';
 import { BRAND, BUNDLES } from '../data';
 import Reveal from './Reveal';
@@ -91,6 +91,17 @@ function PhoneScreen({ step }: { step: number }) {
 /** Three steps with an interactive phone that shows each one */
 export default function HowItWorks() {
   const [step, setStep] = useState(0);
+  const [manual, setManual] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
+  const inView = useInView(ref, { amount: 0.5 });
+  const reduced = useReducedMotion();
+
+  /* Play the walkthrough on its own while it's on screen; a tap takes over */
+  useEffect(() => {
+    if (!inView || manual || reduced) return;
+    const t = window.setTimeout(() => setStep((s) => (s + 1) % STEPS.length), 3200);
+    return () => window.clearTimeout(t);
+  }, [step, inView, manual, reduced]);
 
   return (
     <section id="how" className="py-24 lg:py-32">
@@ -108,24 +119,27 @@ export default function HowItWorks() {
               <li key={s.title}>
                 <button
                   type="button"
-                  onClick={() => setStep(i)}
+                  onClick={() => {
+                    setManual(true);
+                    setStep(i);
+                  }}
                   aria-pressed={step === i}
                   className={
                     'flex w-full items-start gap-5 rounded-[1.75rem] p-5 text-left transition-all duration-200 sm:p-6 ' +
-                    (step === i ? 'bg-white shadow-[0_20px_40px_-24px_rgba(30,11,58,0.35)]' : 'hover:bg-white/60')
+                    (step === i ? 'bg-card shadow-[0_20px_40px_-24px_rgba(30,11,58,0.35)]' : 'hover:bg-card/60')
                   }
                 >
                   <span
                     className={
                       'inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl font-display text-xl font-black transition-colors ' +
-                      (step === i ? 'bg-coral text-white' : 'bg-night/5 text-night/50')
+                      (step === i ? 'bg-coral text-white' : 'bg-ink/5 text-ink/50')
                     }
                   >
                     {i + 1}
                   </span>
                   <span>
                     <span className="block font-display text-xl font-bold">{s.title}</span>
-                    <span className="mt-1 block leading-relaxed text-night/65">{s.body}</span>
+                    <span className="mt-1 block leading-relaxed text-ink/65">{s.body}</span>
                   </span>
                 </button>
               </li>
@@ -133,16 +147,18 @@ export default function HowItWorks() {
           </ol>
         </div>
 
+        <div ref={ref}>
         <Reveal className="relative mx-auto w-full max-w-[20rem]">
           <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-sun/70 blur-0" aria-hidden="true" />
           <div className="absolute -right-10 bottom-6 h-40 w-40 rounded-full bg-coral/80" aria-hidden="true" />
-          <div className="relative aspect-[9/19] rounded-[3rem] bg-night p-3 shadow-[0_40px_80px_-30px_rgba(30,11,58,0.7)]">
+          <div className="relative aspect-[9/19] animate-float rounded-[3rem] bg-night p-3 ring-1 ring-white/10 motion-reduce:animate-none shadow-[0_40px_80px_-30px_rgba(30,11,58,0.7)]">
             <div className="relative h-full overflow-hidden rounded-[2.4rem] bg-cream text-night">
               <div className="absolute left-1/2 top-3 h-6 w-24 -translate-x-1/2 rounded-full bg-night" aria-hidden="true" />
               <PhoneScreen step={step} />
             </div>
           </div>
         </Reveal>
+        </div>
       </div>
     </section>
   );

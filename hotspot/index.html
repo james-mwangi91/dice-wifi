@@ -16,6 +16,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&family=Outfit:wght@500..900&display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://images.unsplash.com" />
+    <!-- Apply the saved (or system) theme before first paint to avoid a flash -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('dice-hotspot-theme');
+          if (t === 'dark' || (!t && matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

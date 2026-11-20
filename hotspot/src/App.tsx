@@ -1,4 +1,4 @@
-import { Check } from 'lucide-react';
+import { Wifi } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Bundles from './components/Bundles';
@@ -20,11 +20,16 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <div className="border-y border-night/10 bg-white">
-          <ul className="container-x flex flex-wrap items-center justify-center gap-x-8 gap-y-3 py-5">
-            {PERKS.map((p) => (
-              <li key={p} className="flex items-center gap-2 font-display font-semibold text-night/80">
-                <Check className="h-4 w-4 text-coral" strokeWidth={3} /> {p}
+        {/* Perks ticker — two copies so the -50% loop is seamless */}
+        <div className="overflow-hidden border-y border-ink/10 bg-card py-5" aria-label="Why DICE Hotspot">
+          <ul className="flex w-max animate-marquee gap-10 pr-10 hover:[animation-play-state:paused] motion-reduce:animate-none">
+            {[...PERKS, ...PERKS, ...PERKS, ...PERKS].map((p, i) => (
+              <li
+                key={i}
+                aria-hidden={i >= PERKS.length}
+                className="flex items-center gap-2.5 whitespace-nowrap font-display text-lg font-semibold text-ink/80"
+              >
+                <Wifi className="h-4 w-4 text-coral" strokeWidth={2.5} /> {p}
               </li>
             ))}
           </ul>

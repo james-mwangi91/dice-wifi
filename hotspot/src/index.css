@@ -3,12 +3,27 @@
 @tailwind utilities;
 
 @layer base {
+  /* Theme tokens as RGB channels so Tailwind opacity modifiers work */
+  :root {
+    --surface: 255 247 238; /* cream */
+    --card: 255 255 255;
+    --ink: 30 11 58; /* night */
+    --soft: 255 241 199; /* sun-100 */
+    color-scheme: light;
+  }
+  .dark {
+    --surface: 17 6 34;
+    --card: 30 11 58;
+    --ink: 255 247 238;
+    --soft: 26 10 50;
+    color-scheme: dark;
+  }
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-cream font-sans text-night antialiased;
+    @apply bg-surface font-sans text-ink antialiased transition-colors duration-300;
   }
   section[id] {
     scroll-margin-top: 84px;
@@ -46,10 +61,10 @@
     @apply btn border-2 border-white/25 text-white hover:border-white hover:bg-white/10;
   }
   .btn-ghost {
-    @apply btn border-2 border-night/15 text-night hover:border-night;
+    @apply btn border-2 border-ink/15 text-ink hover:border-ink;
   }
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full bg-coral-100 px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-[0.14em] text-coral-600;
+    @apply inline-flex items-center gap-2 rounded-full bg-coral-100 px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-[0.14em] text-coral-600 dark:bg-coral/15 dark:text-coral;
   }
 }
 

@@ -1,12 +1,42 @@
+import { motion } from 'framer-motion';
 import { Check, Clock, Smartphone, Zap } from 'lucide-react';
 import { BRAND, BUNDLES, BUNDLE_PERKS } from '../data';
 import Reveal from './Reveal';
 
+/** Signal-strength bars that grow in on scroll: more time, more bars */
+function SignalBars({ level, light }: { level: number; light: boolean }) {
+  return (
+    <span className="inline-flex h-6 items-end gap-[3px]" aria-hidden="true">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <motion.span
+          key={n}
+          className={'w-[5px] origin-bottom rounded-full ' + (n <= level ? (light ? 'bg-sun' : 'bg-coral') : 'bg-white/15')}
+          style={{ height: `${n * 20}%` }}
+          initial={{ scaleY: 0 }}
+          whileInView={{ scaleY: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.2 + n * 0.08, type: 'spring', stiffness: 300, damping: 18 }}
+        />
+      ))}
+    </span>
+  );
+}
+
 /** Bundle price list — time-based, unlimited data */
 export default function Bundles() {
   return (
-    <section id="bundles" className="relative bg-night py-24 text-white lg:py-32">
-      <div className="container-x">
+    <section id="bundles" className="relative overflow-hidden bg-night py-24 text-white lg:py-32">
+      {/* Signal rings radiating from the corner */}
+      <div className="pointer-events-none absolute -right-40 -top-40 h-[40rem] w-[40rem]" aria-hidden="true">
+        {[0, 1.2, 2.4].map((d) => (
+          <span
+            key={d}
+            className="absolute inset-0 rounded-full border border-sun/20 animate-ripple motion-reduce:hidden"
+            style={{ animationDelay: `${d}s`, animationDuration: '6s' }}
+          />
+        ))}
+      </div>
+      <div className="container-x relative">
         <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-2xl">
             <span className="eyebrow !bg-white/10 !text-sun">Bundles</span>
@@ -41,7 +71,10 @@ export default function Bundles() {
                     Best value
                   </span>
                 )}
-                <p className="font-display text-lg font-bold">{b.name}</p>
+                <div className="flex items-start justify-between">
+                  <p className="font-display text-lg font-bold">{b.name}</p>
+                  <SignalBars level={i + 1} light={!!b.popular} />
+                </div>
                 <p className={'text-sm italic ' + (b.popular ? 'text-white/80' : 'text-white/50')}>{b.swahili}</p>
 
                 <p className="mt-6 font-display font-black leading-none tracking-tight">

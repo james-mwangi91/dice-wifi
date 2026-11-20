@@ -1,41 +1,107 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play, Wifi } from 'lucide-react';
-import { BUNDLES, HERO_SLIDES, unsplash, unsplashSet } from '../data';
+import {
+  BUNDLES,
+  HERO_DESKTOP_WIDTHS,
+  HERO_MOBILE_WIDTHS,
+  HERO_SLIDES,
+  unsplash,
+  unsplashSet,
+  type Slide,
+} from '../data';
 
-const SLIDE_MS = 6000;
-const RATIO = 4 / 5;
+const SLIDE_MS = 7000;
+const EASE = [0.22, 1, 0.36, 1] as const;
 
-function useReducedMotion() {
-  const [reduced, setReduced] = useState(
-    () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+/** One full-bleed slide: 16:9 HD on wide screens, 9:16 portrait crop on phones */
+function SlideImage({ slide, first, reduced }: { slide: Slide; first: boolean; reduced: boolean }) {
+  return (
+    /* The mirror lives on a wrapper: the Ken Burns animation owns the img's transform */
+    <div className={'h-full w-full ' + (slide.flip ? '-scale-x-100' : '')}>
+    <picture className="block h-full w-full">
+      <source
+        media="(max-width: 767px)"
+        srcSet={unsplashSet(slide.id, 9 / 16, HERO_MOBILE_WIDTHS, 82)}
+        sizes="100vw"
+      />
+      <img
+        src={unsplash(slide.id, 1920, 1080, 82)}
+        srcSet={unsplashSet(slide.id, 16 / 9, HERO_DESKTOP_WIDTHS, 82)}
+        sizes="100vw"
+        alt={slide.alt}
+        fetchPriority={first ? 'high' : 'auto'}
+        decoding="async"
+        draggable={false}
+        style={{ objectPosition: slide.pos }}
+        className={'h-full w-full select-none object-cover ' + (reduced ? '' : 'animate-kenburns')}
+      />
+    </picture>
+    </div>
   );
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const on = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener('change', on);
-    return () => mq.removeEventListener('change', on);
-  }, []);
-  return reduced;
 }
 
-/** HD photo carousel: autoplay with progress bars, swipe, arrows and keyboard */
-function Carousel() {
-  const reduced = useReducedMotion();
-  const [index, setIndex] = useState(0);
-  const [dir, setDir] = useState(1);
-  const [paused, setPaused] = useState(false);
-  const [hovering, setHovering] = useState(false);
-  const playing = !paused && !hovering && !reduced;
-  const slide = HERO_SLIDES[index];
+/** WiFi glyph with radiating rings — the hero's signature motion */
+function SignalPulse() {
+  return (
+    <span className="relative inline-flex h-9 w-9 items-center justify-center" aria-hidden="true">
+      {[0, 1.2, 2.4].map((d) => (
+        <span
+          key={d}
+          className="absolute inset-0 rounded-full border-2 border-sun animate-ripple"
+          style={{ animationDelay: `${d}s` }}
+        />
+      ))}
+      <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-sun text-night">
+        <Wifi className="h-4 w-4" strokeWidth={2.5} />
+      </span>
+    </span>
+  );
+}
 
-  const go = useCallback((next: number) => {
-    setIndex((cur) => {
-      const n = (next + HERO_SLIDES.length) % HERO_SLIDES.length;
-      setDir(n > cur || (cur === HERO_SLIDES.length - 1 && n === 0) ? 1 : -1);
-      return n;
-    });
-  }, []);
+/** Headline that rises in word by word */
+function RiseHeadline({ reduced }: { reduced: boolean }) {
+  const lines: { text: string; mark?: boolean }[][] = [
+    [{ text: 'Fast' }, { text: 'WiFi,' }],
+    [{ text: 'pocket', mark: true }, { text: 'prices.' }],
+  ];
+  let i = 0;
+  return (
+    <h1 className="font-display text-[3.4rem] font-black leading-[0.95] tracking-tight text-white sm:text-7xl lg:text-8xl xl:text-[6.5rem]">
+      {lines.map((line, li) => (
+        <span key={li} className="block">
+          {line.map((w) => {
+            const delay = 0.15 + i++ * 0.09;
+            return (
+              <span key={w.text} className="mr-[0.22em] inline-block overflow-hidden pb-[0.08em] align-bottom last:mr-0">
+                <motion.span
+                  className={'inline-block ' + (w.mark ? 'squiggle' : '')}
+                  initial={reduced ? false : { y: '105%' }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.8, delay, ease: EASE }}
+                >
+                  {w.text}
+                </motion.span>
+              </span>
+            );
+          })}
+        </span>
+      ))}
+    </h1>
+  );
+}
+
+/** Full-viewport hero: HD photo carousel as the background, copy in front */
+export default function Hero() {
+  const reduced = !!useReducedMotion();
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const playing = !paused && !hidden && !reduced;
+  const slide = HERO_SLIDES[index];
+  const quick = BUNDLES.filter((b) => ['1h', '24h', '7d'].includes(b.id));
+
+  const go = useCallback((n: number) => setIndex((n + HERO_SLIDES.length) % HERO_SLIDES.length), []);
 
   useEffect(() => {
     if (!playing) return;
@@ -43,225 +109,209 @@ function Carousel() {
     return () => window.clearTimeout(t);
   }, [index, playing, go]);
 
-  /* Warm the cache for the next slide so transitions never show a blank frame */
+  /* Don't burn cycles (or data) while the tab is in the background */
+  useEffect(() => {
+    const on = () => setHidden(document.hidden);
+    document.addEventListener('visibilitychange', on);
+    return () => document.removeEventListener('visibilitychange', on);
+  }, []);
+
+  /* Preload the next slide at the size this screen will request */
   useEffect(() => {
     const next = HERO_SLIDES[(index + 1) % HERO_SLIDES.length];
     const img = new Image();
-    img.src = unsplash(next.id, 1200, Math.round(1200 / RATIO));
+    const mobile = window.matchMedia('(max-width: 767px)').matches;
+    img.sizes = '100vw';
+    img.srcset = mobile
+      ? unsplashSet(next.id, 9 / 16, HERO_MOBILE_WIDTHS, 82)
+      : unsplashSet(next.id, 16 / 9, HERO_DESKTOP_WIDTHS, 82);
   }, [index]);
 
   return (
-    <div
-      className="relative"
+    <motion.section
+      id="top"
       role="region"
       aria-roledescription="carousel"
-      aria-label="DICE Hotspot highlights"
-      onMouseEnter={() => setHovering(true)}
-      onMouseLeave={() => setHovering(false)}
+      aria-label="DICE Hotspot"
+      className="relative flex min-h-[100svh] touch-pan-y flex-col overflow-hidden bg-night text-white"
+      onPanEnd={(_, info) => {
+        if (Math.abs(info.offset.x) < 70 || Math.abs(info.offset.y) > Math.abs(info.offset.x)) return;
+        go(index + (info.offset.x < 0 ? 1 : -1));
+      }}
       onKeyDown={(e) => {
         if (e.key === 'ArrowRight') go(index + 1);
         if (e.key === 'ArrowLeft') go(index - 1);
       }}
     >
-      {/* Sun disc behind the frame */}
-      <div className="absolute -right-10 -top-10 h-48 w-48 rounded-full bg-sun sm:h-64 sm:w-64" aria-hidden="true" />
-
-      <div className="relative aspect-[4/5] overflow-hidden rounded-[2.5rem] bg-night-700 shadow-[0_40px_80px_-30px_rgba(30,11,58,0.7)] sm:aspect-[5/5] lg:aspect-[4/5]">
-        <AnimatePresence initial={false} custom={dir}>
-          <motion.img
+      {/* Background slides — crossfade, each with a slow Ken Burns push */}
+      <div className="absolute inset-0" aria-live={playing ? 'off' : 'polite'}>
+        <AnimatePresence initial={false}>
+          <motion.div
             key={slide.id}
-            src={unsplash(slide.id, 1600, Math.round(1600 / RATIO))}
-            srcSet={unsplashSet(slide.id, RATIO)}
-            sizes="(min-width: 1024px) 40vw, 92vw"
-            alt={slide.alt}
-            custom={dir}
-            variants={{
-              enter: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * 60, scale: reduced ? 1 : 1.06 }),
-              center: { opacity: 1, x: 0, scale: 1 },
-              exit: (d: number) => ({ opacity: 0, x: reduced ? 0 : d * -60 }),
-            }}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: reduced ? 0.2 : 0.8, ease: [0.22, 1, 0.36, 1] }}
-            drag={reduced ? false : 'x'}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.2}
-            onDragEnd={(_, info) => {
-              if (info.offset.x < -60) go(index + 1);
-              else if (info.offset.x > 60) go(index - 1);
-            }}
-            draggable={false}
-            fetchPriority={index === 0 ? 'high' : 'auto'}
-            className="absolute inset-0 h-full w-full cursor-grab touch-pan-y select-none object-cover active:cursor-grabbing"
-          />
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reduced ? 0.2 : 1.4, ease: 'easeInOut' }}
+          >
+            <SlideImage slide={slide} first={index === 0} reduced={reduced} />
+          </motion.div>
         </AnimatePresence>
 
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-night/50 to-transparent" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-night/85 via-night/30 to-transparent" />
-
-        {/* Caption */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-6 sm:p-8" aria-live="polite">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={slide.id}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4, delay: 0.15 }}
-            >
-              <span className="inline-block rounded-full bg-sun px-3 py-1 font-display text-xs font-bold uppercase tracking-wider text-night">
-                {slide.tag}
-              </span>
-              <p className="mt-3 max-w-sm font-display text-xl font-semibold leading-snug text-white sm:text-2xl">{slide.caption}</p>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Progress bars */}
-        <div className="absolute inset-x-6 top-6 flex gap-2 sm:inset-x-8">
-          {HERO_SLIDES.map((s, i) => (
-            <button
-              key={s.id}
-              type="button"
-              onClick={() => go(i)}
-              aria-label={`Show slide ${i + 1} of ${HERO_SLIDES.length}`}
-              aria-current={i === index}
-              className="group relative h-6 flex-1"
-            >
-              <span className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 overflow-hidden rounded-full bg-white/35">
-                <span
-                  key={`${i}-${index}-${playing}`}
-                  className="block h-full origin-left rounded-full bg-white"
-                  style={{
-                    transform: i < index ? 'scaleX(1)' : 'scaleX(0)',
-                    animation:
-                      i === index
-                        ? playing
-                          ? `progress ${SLIDE_MS}ms linear forwards`
-                          : undefined
-                        : undefined,
-                    ...(i === index && !playing ? { transform: 'scaleX(1)' } : {}),
-                  }}
-                />
-              </span>
-            </button>
-          ))}
-        </div>
+        {/* Legibility: violet wash from the text side, plus top and bottom fades */}
+        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/40 to-transparent md:bg-[linear-gradient(90deg,rgba(30,11,58,0.9)_0%,rgba(30,11,58,0.6)_38%,rgba(30,11,58,0)_70%)]" />
+        <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-night/60 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-night/80 to-transparent" />
       </div>
 
-      {/* Controls */}
-      <div className="mt-5 flex items-center justify-between">
-        <p className="font-display text-sm font-bold text-night/60">
-          <span className="text-night">{String(index + 1).padStart(2, '0')}</span> / {String(HERO_SLIDES.length).padStart(2, '0')}
-        </p>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-night/15 text-night transition-colors hover:border-night"
+      {/* Copy */}
+      <div className="container-x relative flex flex-1 flex-col justify-end pb-10 pt-32 md:justify-center md:pb-24">
+        <div className="max-w-2xl">
+          <motion.p
+            className="inline-flex items-center gap-3 font-display text-sm font-bold uppercase tracking-[0.16em] text-sun"
+            initial={reduced ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: EASE }}
           >
-            {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
-          </button>
-          <button
-            type="button"
-            onClick={() => go(index - 1)}
-            aria-label="Previous slide"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-night/15 text-night transition-colors hover:border-night"
+            <SignalPulse /> Pay-as-you-go WiFi · Nairobi
+          </motion.p>
+
+          <div className="mt-6">
+            <RiseHeadline reduced={reduced} />
+          </div>
+
+          <motion.p
+            className="mt-6 max-w-xl text-lg leading-relaxed text-white/85 sm:text-xl"
+            initial={reduced ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.55, ease: EASE }}
           >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => go(index + 1)}
-            aria-label="Next slide"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-night text-white transition-colors hover:bg-night-700"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+            Join <strong className="font-semibold text-white">DICE Hotspot</strong> at estates, cafés and stages across Nairobi.
+            Unlimited data from <strong className="font-semibold text-sun">KES 10 an hour</strong> — pay with M-Pesa and you&rsquo;re on.
+          </motion.p>
 
-/** Split hero: promise + quick bundle picks on the left, HD carousel on the right */
-export default function Hero() {
-  const quick = BUNDLES.filter((b) => ['1h', '24h', '7d'].includes(b.id));
-
-  return (
-    <section id="top" className="relative overflow-hidden pb-20 pt-28 lg:pb-28 lg:pt-36">
-      <div className="container-x grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
-        <motion.div
-          className="lg:col-span-7"
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <span className="eyebrow">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-coral animate-ping-soft" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-coral" />
-            </span>
-            Pay-as-you-go WiFi · Nairobi
-          </span>
-
-          <h1 className="mt-6 font-display text-5xl font-black leading-[0.98] tracking-tight text-night sm:text-6xl lg:text-7xl xl:text-[5.25rem]">
-            Fast WiFi,
-            <br />
-            <span className="squiggle">pocket</span> prices.
-          </h1>
-
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-night/70 sm:text-xl">
-            Join <strong className="font-semibold text-night">DICE Hotspot</strong> at estates, cafés and stages across Nairobi.
-            Unlimited data from <strong className="font-semibold text-night">KES 10 an hour</strong> — pay with M-Pesa and you&rsquo;re on.
-          </p>
-
-          {/* Quick-pick bundles */}
-          <div className="mt-9 grid max-w-xl grid-cols-3 gap-3">
-            {quick.map((b) => (
-              <a
+          {/* Quick-pick bundles, frosted over the photo */}
+          <div className="mt-8 grid max-w-lg grid-cols-3 gap-2.5 sm:gap-3">
+            {quick.map((b, i) => (
+              <motion.a
                 key={b.id}
                 href="#bundles"
+                initial={reduced ? false : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 + i * 0.08, ease: EASE }}
+                whileHover={reduced ? undefined : { y: -4 }}
                 className={
-                  'group relative rounded-3xl border-2 p-4 transition-all duration-200 hover:-translate-y-1 sm:p-5 ' +
-                  (b.popular ? 'border-night bg-night text-white' : 'border-night/10 bg-white text-night hover:border-night/30')
+                  'relative rounded-2xl border p-3.5 backdrop-blur-md transition-colors sm:p-4 ' +
+                  (b.popular
+                    ? 'border-sun bg-sun text-night'
+                    : 'border-white/25 bg-white/10 text-white hover:bg-white/20')
                 }
               >
                 {b.popular && (
-                  <span className="absolute -top-3 left-4 rounded-full bg-coral px-2.5 py-0.5 font-display text-[10px] font-bold uppercase tracking-wider text-white">
+                  <span className="absolute -top-2.5 left-3 rounded-full bg-coral px-2 py-0.5 font-display text-[10px] font-bold uppercase tracking-wider text-white">
                     Popular
                   </span>
                 )}
-                <span className={'block text-xs font-semibold ' + (b.popular ? 'text-white/60' : 'text-night/50')}>{b.duration}</span>
-                <span className="mt-1 block font-display text-2xl font-black sm:text-3xl">
-                  <span className="text-sm font-bold">KES </span>
+                <span className={'block text-xs font-semibold ' + (b.popular ? 'text-night/70' : 'text-white/70')}>{b.duration}</span>
+                <span className="mt-0.5 block font-display text-2xl font-black sm:text-3xl">
+                  <span className="text-xs font-bold sm:text-sm">KES </span>
                   {b.price}
                 </span>
-              </a>
+              </motion.a>
             ))}
           </div>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <motion.div
+            className="mt-8 flex flex-wrap items-center gap-3"
+            initial={reduced ? false : { opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.95, ease: EASE }}
+          >
             <a href="#bundles" className="btn-coral">
               See all bundles <ArrowRight className="h-4 w-4" />
             </a>
-            <a href="#how" className="btn-ghost">
+            <a href="#how" className="btn-ghost-light">
               <Wifi className="h-4 w-4" /> How to connect
             </a>
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="mx-auto w-full max-w-md lg:col-span-5 lg:max-w-none"
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Carousel />
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
-    </section>
+
+      {/* Slide caption, progress and controls */}
+      <div className="container-x relative pb-8">
+        <div className="flex flex-col gap-5 border-t border-white/15 pt-5 md:flex-row md:items-end md:justify-between">
+          <div className="hidden min-h-[3.5rem] md:block" aria-live="polite">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={slide.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center gap-4"
+              >
+                <span className="rounded-full bg-sun px-3 py-1 font-display text-xs font-bold uppercase tracking-wider text-night">
+                  {slide.tag}
+                </span>
+                <span className="max-w-md font-display text-lg font-semibold text-white/90">{slide.caption}</span>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="flex flex-1 gap-2 md:w-56 md:flex-none">
+              {HERO_SLIDES.map((s, i) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => go(i)}
+                  aria-label={`Show slide ${i + 1} of ${HERO_SLIDES.length}: ${s.tag}`}
+                  aria-current={i === index}
+                  className="relative h-6 flex-1"
+                >
+                  <span className="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 overflow-hidden rounded-full bg-white/25">
+                    <span
+                      key={`${i}-${index}-${playing}`}
+                      className="block h-full origin-left rounded-full bg-sun"
+                      style={{
+                        transform: i < index || (i === index && !playing) ? 'scaleX(1)' : 'scaleX(0)',
+                        animation: i === index && playing ? `progress ${SLIDE_MS}ms linear forwards` : undefined,
+                      }}
+                    />
+                  </span>
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setPaused((p) => !p)}
+                aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/25 transition-colors hover:border-white hover:bg-white/10"
+              >
+                {paused ? <Play className="h-4 w-4" /> : <Pause className="h-4 w-4" />}
+              </button>
+              <button
+                type="button"
+                onClick={() => go(index - 1)}
+                aria-label="Previous slide"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-white/25 transition-colors hover:border-white hover:bg-white/10"
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => go(index + 1)}
+                aria-label="Next slide"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-night transition-colors hover:bg-sun"
+              >
+                <ChevronRight className="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </motion.section>
   );
 }

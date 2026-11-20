@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
+import ThemeToggle from './ThemeToggle';
 
 const LINKS = [
   { label: 'Bundles', href: '#bundles' },
@@ -15,6 +16,9 @@ const LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  /* Thin coral line across the top that fills as you read down the page */
+  const { scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 200, damping: 30, restDelta: 0.001 });
 
   useEffect(() => {
     const on = () => setScrolled(window.scrollY > 16);
@@ -36,12 +40,17 @@ export default function Navbar() {
       <header
         className={
           'fixed inset-x-0 top-0 z-50 transition-all duration-300 ' +
-          (scrolled ? 'bg-cream/90 py-3 shadow-[0_1px_0_rgba(30,11,58,0.08)] backdrop-blur-xl' : 'py-5')
+          (scrolled ? 'bg-surface/90 py-3 shadow-[0_1px_0_rgb(var(--ink)/0.08)] backdrop-blur-xl' : 'py-5')
         }
       >
+        <motion.div
+          className="absolute inset-x-0 top-0 h-[3px] origin-left bg-coral"
+          style={{ scaleX: progress }}
+          aria-hidden="true"
+        />
         <nav className="container-x flex items-center justify-between gap-6" aria-label="Main navigation">
           <a href="#top" aria-label="DICE Hotspot — back to top">
-            <Logo />
+            <Logo light={!scrolled} />
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
@@ -49,7 +58,10 @@ export default function Navbar() {
               <li key={l.href}>
                 <a
                   href={l.href}
-                  className="rounded-full px-4 py-2 font-display text-[15px] font-semibold text-night/70 transition-colors hover:bg-night/5 hover:text-night"
+                  className={
+                    'rounded-full px-4 py-2 font-display text-[15px] font-semibold transition-colors ' +
+                    (scrolled ? 'text-ink/70 hover:bg-ink/5 hover:text-ink' : 'text-white/85 hover:bg-white/10 hover:text-white')
+                  }
                 >
                   {l.label}
                 </a>
@@ -58,6 +70,7 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
+            <ThemeToggle onDark={!scrolled} />
             <a href="#bundles" className="btn-coral hidden !px-5 !py-2.5 !text-sm sm:inline-flex">
               Buy a bundle
             </a>
@@ -67,7 +80,10 @@ export default function Navbar() {
               aria-label="Open menu"
               aria-expanded={open}
               aria-controls="mobile-menu"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border-2 border-night/15 text-night lg:hidden"
+              className={
+                'inline-flex h-11 w-11 items-center justify-center rounded-full border-2 lg:hidden ' +
+                (scrolled ? 'border-ink/15 text-ink' : 'border-white/30 text-white')
+              }
             >
               <Menu className="h-5 w-5" />
             </button>

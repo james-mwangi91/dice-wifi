@@ -45,7 +45,7 @@ export default function Host() {
             <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
               Turn your WiFi into <span className="squiggle">extra income.</span>
             </h2>
-            <p className="mt-5 text-lg leading-relaxed text-night/70">
+            <p className="mt-5 text-lg leading-relaxed text-ink/70">
               Run a café, salon, shop, hostel or apartment block? Host a DICE Hotspot and your customers get reliable WiFi
               while you earn from every bundle they buy.
             </p>
@@ -60,7 +60,7 @@ export default function Host() {
                   </span>
                   <span>
                     <span className="block font-display text-lg font-bold">{p.title}</span>
-                    <span className="block text-night/65">{p.body}</span>
+                    <span className="block text-ink/65">{p.body}</span>
                   </span>
                 </li>
               </Reveal>
