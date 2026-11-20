@@ -4,8 +4,8 @@ import { ArrowRight, CheckCircle2, Wifi } from 'lucide-react';
 import { BUNDLES } from '../data';
 import heroLarge from '../assets/hero-friends-1169.webp';
 import heroSmall from '../assets/hero-friends-640.webp';
-import connectedLarge from '../assets/hero-connected-1536.webp';
-import connectedSmall from '../assets/hero-connected-800.webp';
+import thumbsLarge from '../assets/hero-thumbsup-1535.webp';
+import thumbsSmall from '../assets/hero-thumbsup-800.webp';
 import phoneImg from '../assets/hero-phone-612.webp';
 
 const SLIDE_MS = 6500;
@@ -15,7 +15,7 @@ interface BlobSlide {
   src: string;
   srcSet: string;
   alt: string;
-  /** object-position inside the square blob, so faces stay in frame */
+  /** object-position inside the 4:3 blob, so faces stay in frame */
   pos: string;
 }
 
@@ -26,13 +26,13 @@ const SLIDES: BlobSlide[] = [
     src: heroLarge,
     srcSet: `${heroSmall} 640w, ${heroLarge} 1169w`,
     alt: 'Five friends on a sofa streaming, gaming and browsing on phones, a tablet and laptops',
-    pos: '50% 75%',
+    pos: '50% 92%',
   },
   {
-    key: 'connected',
-    src: connectedLarge,
-    srcSet: `${connectedSmall} 800w, ${connectedLarge} 1536w`,
-    alt: 'Two smiling friends at a DICE WiFi Hotspot sign, one holding a phone that shows Connected',
+    key: 'thumbsup',
+    src: thumbsLarge,
+    srcSet: `${thumbsSmall} 800w, ${thumbsLarge} 1535w`,
+    alt: 'Two smiling friends giving a thumbs up, one holding a phone showing a connected WiFi signal',
     pos: '50% 50%',
   },
   {
@@ -209,7 +209,7 @@ export default function Hero() {
             />
 
             <div
-              className="relative aspect-square animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(14,27,77,0.6)] motion-reduce:animate-none"
+              className="relative aspect-[4/3] animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(14,27,77,0.6)] motion-reduce:animate-none"
               role="region"
               aria-roledescription="carousel"
               aria-label="DICE Hotspot in everyday life"
@@ -223,10 +223,10 @@ export default function Hero() {
                   alt={slide.alt}
                   fetchPriority={index === 0 ? 'high' : 'auto'}
                   decoding="async"
-                  initial={{ opacity: 0, scale: reduced ? 1 : 1.08 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ opacity: { duration: 1.1 }, scale: { duration: 6, ease: 'easeOut' } }}
+                  transition={{ duration: reduced ? 0.2 : 1.1 }}
                   style={{ objectPosition: slide.pos }}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
