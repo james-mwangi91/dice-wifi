@@ -2,7 +2,6 @@ import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Features from './components/Features';
 import Bundles from './components/Bundles';
-import DealsStrip from './components/DealsStrip';
 import Stats from './components/Stats';
 import HowItWorks from './components/HowItWorks';
 import Spots from './components/Spots';
@@ -10,7 +9,7 @@ import Host from './components/Host';
 import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 
-/** Single-page site for DICE Hotspot */
+/** Single-page site for DICE WIFI hotspot */
 export default function App() {
   return (
     <>
@@ -22,7 +21,6 @@ export default function App() {
         <Hero />
         <Features />
         <Bundles />
-        <DealsStrip />
         <HowItWorks />
         <Stats />
         <Spots />

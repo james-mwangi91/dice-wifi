@@ -1,21 +1,14 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Coffee, GraduationCap, Building2, Bus, MapPin, Search } from 'lucide-react';
 import { SPOT_AREAS, VENUE_TYPES } from '../data';
 import Reveal from './Reveal';
-import { SPOT_SEARCH_EVENT } from './DealsStrip';
 
 const VENUE_ICONS = [Building2, Coffee, Bus, GraduationCap];
 
-/** Where to find DICE Hotspot — searchable area list + venue types */
+/** Where to find DICE WIFI — searchable area list + venue types */
 export default function Spots() {
   const [q, setQ] = useState('');
 
-  /* The navy search strip further up can fill this search in */
-  useEffect(() => {
-    const on = (e: Event) => setQ(String((e as CustomEvent<string>).detail ?? ''));
-    window.addEventListener(SPOT_SEARCH_EVENT, on);
-    return () => window.removeEventListener(SPOT_SEARCH_EVENT, on);
-  }, []);
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
     return s ? SPOT_AREAS.filter((a) => a.name.toLowerCase().includes(s)) : SPOT_AREAS;
@@ -30,7 +23,7 @@ export default function Spots() {
             Look for the <span className="text-accent">DICE sign.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink/70">
-            DICE Hotspot is live across these areas, with new spots switching on every month.
+            DICE WIFI hotspots are live in Rongai, Banana and Kiserian. Look for &ldquo;DICE WIFI&rdquo; in your WiFi list.
           </p>
         </Reveal>
 
@@ -45,7 +38,7 @@ export default function Spots() {
                 id="spot-search"
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="e.g. Ruiru"
+                placeholder="e.g. Rongai"
                 className="w-full bg-transparent px-3 py-3.5 focus:outline-none"
               />
             </div>

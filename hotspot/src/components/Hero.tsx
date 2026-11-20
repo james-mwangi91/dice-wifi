@@ -138,7 +138,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, ease: EASE }}
           >
-            <Wifi className="h-3.5 w-3.5" strokeWidth={3} /> Pay-as-you-go WiFi · Nairobi
+            <Wifi className="h-3.5 w-3.5" strokeWidth={3} /> Hotspot WiFi · Rongai · Banana · Kiserian
           </motion.p>
 
           <div className="mt-6">
@@ -151,8 +151,8 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45, ease: EASE }}
           >
-            Stream, game, study and scroll together. Join <strong className="font-semibold text-ink">DICE Hotspot</strong> at
-            estates, cafés and stages across Nairobi — unlimited data from{' '}
+            Stream, game, study and scroll together. Join <strong className="font-semibold text-ink">DICE WIFI</strong> at
+            apartments, cafés, stages and hostels in Rongai, Banana and Kiserian — unlimited data from{' '}
             <strong className="font-semibold text-accent">KES 10 an hour</strong>, paid with M-Pesa.
           </motion.p>
 
@@ -212,7 +212,7 @@ export default function Hero() {
               className="relative aspect-square animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(14,27,77,0.6)] motion-reduce:animate-none"
               role="region"
               aria-roledescription="carousel"
-              aria-label="DICE Hotspot in everyday life"
+              aria-label="DICE WIFI in everyday life"
             >
               <AnimatePresence initial={false}>
                 <motion.img
@@ -250,7 +250,7 @@ export default function Hero() {
               <p className="flex items-center gap-2.5">
                 <CheckCircle2 className="h-6 w-6 text-accent" />
                 <span>
-                  <span className="block font-display text-lg font-black leading-none text-ink">KES 40</span>
+                  <span className="block font-display text-lg font-black leading-none text-ink">KES 50</span>
                   <span className="text-xs text-ink/60">24 hrs · paid via M-Pesa</span>
                 </span>
               </p>

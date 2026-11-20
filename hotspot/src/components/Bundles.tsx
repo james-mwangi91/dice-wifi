@@ -1,5 +1,5 @@
 import { Check } from 'lucide-react';
-import { BRAND, BUNDLES } from '../data';
+import { BUNDLES } from '../data';
 import Reveal from './Reveal';
 
 /** Short label for the circle on each card: "1 hr", "24 hrs", "7 days" */
@@ -42,9 +42,9 @@ export default function Bundles() {
                         (hot ? 'bg-night text-white' : 'bg-coral text-white')
                       }
                     >
-                      {hot ? 'Best value' : b.name}
+                      {hot ? 'Best value' : 'Package'}
                     </span>
-                    <p className="font-display text-lg font-semibold">{hot ? b.name : b.swahili}</p>
+                    <p className="font-display text-lg font-semibold">{b.name}</p>
                     <svg className="absolute inset-x-0 -bottom-px h-8 w-full text-card" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true">
                       <path d="M0 20 C 30 0, 70 0, 100 20 Z" fill="currentColor" />
                     </svg>
@@ -71,7 +71,7 @@ export default function Bundles() {
                     <p className="mt-1 text-xs text-ink/55">{b.blurb}</p>
 
                     <ul className="mt-6 flex-1 space-y-2.5 text-left text-sm">
-                      {[b.duration + ' of access', 'Unlimited data', `${b.devices} device${b.devices > 1 ? 's' : ''}`, 'Pay with M-Pesa'].map((f) => (
+                      {[b.duration + ' of access', 'Unlimited data', 'Pay with M-Pesa', 'No app, no sign-up'].map((f) => (
                         <li key={f} className="flex items-center gap-2.5 text-ink/75">
                           <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-coral/10 text-accent">
                             <Check className="h-3 w-3" strokeWidth={3} />
@@ -97,9 +97,9 @@ export default function Bundles() {
         <p className="mt-3 text-center text-xs text-ink/45 sm:hidden">Swipe to see all bundles →</p>
 
         <p className="mt-10 text-center text-sm text-ink/60">
-          Need WiFi for a whole building or event?{' '}
-          <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="font-semibold text-accent underline underline-offset-4">
-            Ask us for a custom plan
+          Own apartments or a business?{' '}
+          <a href="#host" className="font-semibold text-accent underline underline-offset-4">
+            We install DICE WIFI for free
           </a>
           .
         </p>
