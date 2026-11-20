@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
-import { Mail, MapPin, Menu, Phone, X } from 'lucide-react';
-import { BRAND } from '../data';
+import { Menu, X } from 'lucide-react';
 import Logo from './Logo';
 import ThemeToggle from './ThemeToggle';
 
@@ -44,31 +43,8 @@ export default function Navbar() {
           (scrolled ? 'shadow-[0_10px_30px_-14px_rgba(14,27,77,0.45)]' : '')
         }
       >
-        {/* Thin navy info bar, as in the theme; folds away once you scroll */}
-        <div
-          className={
-            'overflow-hidden bg-night text-white/80 transition-all duration-300 dark:bg-[#040817] ' +
-            (scrolled ? 'max-h-0' : 'max-h-12')
-          }
-        >
-          <div className="container-x hidden items-center justify-between py-2 text-xs md:flex">
-            <div className="flex items-center gap-6">
-              <a href={BRAND.phoneHref} className="flex items-center gap-1.5 hover:text-white">
-                <Phone className="h-3.5 w-3.5 text-sun" /> {BRAND.phone}
-              </a>
-              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-1.5 hover:text-white">
-                <Mail className="h-3.5 w-3.5 text-sun" /> {BRAND.email}
-              </a>
-              <span className="flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5 text-sun" /> Nairobi &amp; satellite towns
-              </span>
-            </div>
-            <span>Pay with M-Pesa · Support 24/7</span>
-          </div>
-        </div>
-
         {/* Main bar: white in light mode, navy in dark mode */}
-        <div className="border-b border-ink/10 bg-card/95 backdrop-blur-xl dark:border-white/10 dark:bg-[#0A1440]/95">
+        <div className="border-b border-ink/10 bg-card/95 backdrop-blur-xl dark:border-white/10 dark:bg-[#0E1830]/95">
         <motion.div
           className="absolute inset-x-0 top-0 h-[3px] origin-left bg-coral"
           style={{ scaleX: progress }}

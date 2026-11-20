@@ -5,17 +5,37 @@
 @layer base {
   /* Theme tokens as RGB channels so Tailwind opacity modifiers work */
   :root {
+    /* Light: the owner's navy & red theme */
     --surface: 244 246 251; /* light grey section */
     --card: 255 255 255;
     --ink: 14 27 77; /* deep navy */
     --soft: 234 238 248;
+    --night: 14 27 77; /* #0E1B4D */
+    --night-800: 21 36 94;
+    --night-700: 29 47 115;
+    --night-600: 42 63 143;
+    --coral: 225 29 46; /* red #E11D2E */
+    --coral-600: 194 20 36;
+    --coral-100: 253 228 230;
+    --sun: 255 122 134;
+    --sun-100: 255 227 230;
     color-scheme: light;
   }
   .dark {
-    --surface: 6 11 32;
-    --card: 14 27 77;
-    --ink: 236 239 248;
-    --soft: 10 18 50;
+    /* Dark: the earlier navy & orange theme */
+    --surface: 9 15 30; /* #090F1E */
+    --card: 20 33 61; /* #14213D */
+    --ink: 236 238 245;
+    --soft: 14 23 43;
+    --night: 20 33 61;
+    --night-800: 27 43 77;
+    --night-700: 36 55 94;
+    --night-600: 48 71 117;
+    --coral: 242 107 29; /* orange #F26B1D */
+    --coral-600: 217 90 16;
+    --coral-100: 253 229 213;
+    --sun: 255 179 122; /* soft peach */
+    --sun-100: 251 231 216;
     color-scheme: dark;
   }
   html {
@@ -48,16 +68,19 @@
     background-position: 0 100%;
     padding-bottom: 0.06em;
   }
+  .dark .squiggle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%23F26B1D' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  }
   /* Circle filled with diagonal coral stripes — decorative accent */
   .stripe-disc {
     @apply rounded-full;
-    background-image: repeating-linear-gradient(-45deg, rgb(225 29 46 / 0.45) 0 2px, transparent 2px 9px);
+    background-image: repeating-linear-gradient(-45deg, rgb(var(--coral) / 0.45) 0 2px, transparent 2px 9px);
   }
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 font-display text-sm font-semibold transition-all duration-200 active:scale-[0.97];
   }
   .btn-coral {
-    @apply btn bg-coral text-white shadow-[0_10px_24px_-10px_rgba(225,29,46,0.55)] hover:bg-coral-600;
+    @apply btn bg-coral text-white shadow-[0_10px_24px_-10px_rgb(var(--coral)/0.55)] hover:bg-coral-600;
   }
   .btn-sun {
     @apply btn bg-sun text-night hover:brightness-95;

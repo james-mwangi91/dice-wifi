@@ -4,12 +4,22 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      /* Navy & red ISP theme. Token names are kept from the first theme:
-         night = deep navy, coral = signal red, sun = light red for details on navy. */
+      /* Brand colours are theme variables (see index.css):
+         light = navy & red, dark = navy & orange.
+         night = navy, coral = accent (red / orange), sun = soft accent for details on navy. */
       colors: {
-        night: { DEFAULT: '#0E1B4D', 800: '#15245E', 700: '#1D2F73', 600: '#2A3F8F' },
-        coral: { DEFAULT: '#E11D2E', 600: '#C21424', 100: '#FDE4E6' },
-        sun: { DEFAULT: '#FF7A86', 100: '#FFE3E6' },
+        night: {
+          DEFAULT: 'rgb(var(--night) / <alpha-value>)',
+          800: 'rgb(var(--night-800) / <alpha-value>)',
+          700: 'rgb(var(--night-700) / <alpha-value>)',
+          600: 'rgb(var(--night-600) / <alpha-value>)',
+        },
+        coral: {
+          DEFAULT: 'rgb(var(--coral) / <alpha-value>)',
+          600: 'rgb(var(--coral-600) / <alpha-value>)',
+          100: 'rgb(var(--coral-100) / <alpha-value>)',
+        },
+        sun: { DEFAULT: 'rgb(var(--sun) / <alpha-value>)', 100: 'rgb(var(--sun-100) / <alpha-value>)' },
         cream: '#F4F6FB',
         /* Theme-aware tokens (see index.css): flip between light and dark */
         surface: 'rgb(var(--surface) / <alpha-value>)',

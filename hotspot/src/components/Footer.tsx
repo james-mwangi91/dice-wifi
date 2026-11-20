@@ -36,7 +36,7 @@ export default function Footer() {
       </div>
 
       {/* Footer card */}
-      <div className="bg-night py-16 dark:bg-[#040817]">
+      <div className="bg-night py-16 dark:bg-[#060B16]">
         <div className="container-x">
           <div className="grid gap-10 rounded-lg bg-card p-8 text-ink shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)] sm:p-10 md:grid-cols-4">
             <div className="md:col-span-1">
