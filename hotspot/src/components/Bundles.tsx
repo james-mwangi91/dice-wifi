@@ -42,7 +42,7 @@ export default function Bundles() {
                         (hot ? 'bg-night text-white' : 'bg-coral text-white')
                       }
                     >
-                      {hot ? 'Best value' : 'Package'}
+                      {hot ? 'Best value' : b.duration}
                     </span>
                     <p className="font-display text-lg font-semibold">{b.name}</p>
                     <svg className="absolute inset-x-0 -bottom-px h-8 w-full text-card" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true">
@@ -83,9 +83,10 @@ export default function Bundles() {
 
                     <a
                       href="#how"
+                      aria-label={`Buy ${b.name}, ${b.duration} for KES ${b.price}`}
                       className={'btn mt-7 w-full uppercase tracking-wide text-white ' + (hot ? 'bg-coral hover:bg-coral-600' : 'bg-night hover:bg-night-700 dark:bg-white dark:text-night')}
                     >
-                      Get {b.name}
+                      Buy now
                     </a>
                   </div>
                 </article>
