@@ -43,8 +43,8 @@ export default function Navbar() {
           (scrolled ? 'shadow-[0_10px_30px_-14px_rgba(14,27,77,0.45)]' : '')
         }
       >
-        {/* Main bar: white in light mode, navy in dark mode */}
-        <div className="border-b border-ink/10 bg-card/95 backdrop-blur-xl dark:border-white/10 dark:bg-[#0E1830]/95">
+        {/* Main bar: solid navy in both modes so the links always read clearly */}
+        <div className="border-b border-white/10 bg-night/95 text-white backdrop-blur-xl dark:bg-[#0E1830]/95">
         <motion.div
           className="absolute inset-x-0 top-0 h-[3px] origin-left bg-coral"
           style={{ scaleX: progress }}
@@ -52,7 +52,7 @@ export default function Navbar() {
         />
         <nav className="container-x flex items-center justify-between gap-6 py-3.5" aria-label="Main navigation">
           <a href="#top" aria-label="DICE Hotspot — back to top">
-            <Logo />
+            <Logo light />
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
@@ -61,7 +61,7 @@ export default function Navbar() {
                 <a
                   href={l.href}
                   className={
-                    'relative px-3.5 py-2 font-display text-sm font-semibold uppercase tracking-wide text-ink/80 transition-colors hover:text-coral ' +
+                    'relative px-3.5 py-2 font-display text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:text-white ' +
                     "after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-coral after:transition-transform after:content-[''] hover:after:scale-x-100"
                   }
                 >
@@ -72,7 +72,7 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            <ThemeToggle onDark />
             <a href="#bundles" className="btn-coral hidden !px-5 !py-2.5 !text-sm sm:inline-flex">
               Buy a bundle
             </a>
@@ -84,7 +84,7 @@ export default function Navbar() {
               aria-controls="mobile-menu"
               className={
                 'inline-flex h-11 w-11 items-center justify-center rounded-full border-2 lg:hidden ' +
-                'border-ink/15 text-ink'
+                'border-white/25 text-white'
               }
             >
               <Menu className="h-5 w-5" />
