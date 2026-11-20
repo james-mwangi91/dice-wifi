@@ -1,117 +1,104 @@
-import { motion } from 'framer-motion';
-import { Check, Clock, Smartphone, Zap } from 'lucide-react';
-import { BRAND, BUNDLES, BUNDLE_PERKS } from '../data';
+import { Check } from 'lucide-react';
+import { BRAND, BUNDLES } from '../data';
 import Reveal from './Reveal';
 
-/** Signal-strength bars that grow in on scroll: more time, more bars */
-function SignalBars({ level, light }: { level: number; light: boolean }) {
-  return (
-    <span className="inline-flex h-6 items-end gap-[3px]" aria-hidden="true">
-      {[1, 2, 3, 4, 5].map((n) => (
-        <motion.span
-          key={n}
-          className={'w-[5px] origin-bottom rounded-full ' + (n <= level ? (light ? 'bg-sun' : 'bg-coral') : 'bg-white/15')}
-          style={{ height: `${n * 20}%` }}
-          initial={{ scaleY: 0 }}
-          whileInView={{ scaleY: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 + n * 0.08, type: 'spring', stiffness: 300, damping: 18 }}
-        />
-      ))}
-    </span>
-  );
+/** Short label for the circle on each card: "1 hr", "24 hrs", "7 days" */
+function shortDuration(d: string) {
+  return d.replace(' hours', ' hrs').replace(' hour', ' hr');
 }
 
-/** Bundle price list — time-based, unlimited data */
+/** Bundle price list in the theme's pricing-card style */
 export default function Bundles() {
   return (
-    <section id="bundles" className="relative overflow-hidden bg-night py-24 text-white lg:py-32">
-      {/* Signal rings radiating from the corner */}
-      <div className="pointer-events-none absolute -right-40 -top-40 h-[40rem] w-[40rem]" aria-hidden="true">
-        {[0, 1.2, 2.4].map((d) => (
-          <span
-            key={d}
-            className="absolute inset-0 rounded-full border border-sun/20 animate-ripple motion-reduce:hidden"
-            style={{ animationDelay: `${d}s`, animationDuration: '6s' }}
-          />
-        ))}
-      </div>
-      <div className="container-x relative">
-        <Reveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-2xl">
-            <span className="eyebrow !bg-white/10 !text-sun">Bundles</span>
-            <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
-              Pay for time, <span className="text-sun">not megabytes.</span>
-            </h2>
-            <p className="mt-5 text-lg leading-relaxed text-white/70">
-              Every bundle is unlimited. Buy on the WiFi page when you connect — no app, no sign-up.
-            </p>
-          </div>
-          <ul className="flex flex-wrap gap-2">
-            {BUNDLE_PERKS.map((p) => (
-              <li key={p} className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3.5 py-2 text-sm font-medium">
-                <Check className="h-4 w-4 text-sun" strokeWidth={3} /> {p}
-              </li>
-            ))}
-          </ul>
+    <section id="bundles" className="relative bg-card py-24 lg:py-28">
+      <div className="container-x">
+        <Reveal className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow">Bundles &amp; pricing</span>
+          <h2 className="mt-4 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl lg:text-5xl">
+            Choose your bundle
+          </h2>
+          <p className="mt-4 text-ink/65">
+            Every bundle is unlimited. Buy on the WiFi page when you connect — no app, no sign-up.
+          </p>
         </Reveal>
 
         {/* Phones: a swipeable row. Larger screens: a grid. */}
-        <div className="-mx-5 mt-14 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 pt-4 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-5 [&::-webkit-scrollbar]:hidden">
-          {BUNDLES.map((b, i) => (
-            <Reveal key={b.id} delay={i * 0.06} className="h-full w-[78%] shrink-0 snap-center sm:w-auto">
-              <article
-                className={
-                  'relative flex h-full flex-col rounded-[2rem] p-6 transition-transform duration-300 hover:-translate-y-1.5 ' +
-                  (b.popular ? 'bg-coral text-white ring-4 ring-sun' : 'bg-night-800 ring-1 ring-white/10')
-                }
-              >
-                {b.popular && (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-sun px-3 py-1 font-display text-[11px] font-black uppercase tracking-wider text-night">
-                    Best value
-                  </span>
-                )}
-                <div className="flex items-start justify-between">
-                  <p className="font-display text-lg font-bold">{b.name}</p>
-                  <SignalBars level={i + 1} light={!!b.popular} />
-                </div>
-                <p className={'text-sm italic ' + (b.popular ? 'text-white/80' : 'text-white/50')}>{b.swahili}</p>
-
-                <p className="mt-6 font-display font-black leading-none tracking-tight">
-                  <span className="text-lg">KES </span>
-                  <span className="text-6xl">{b.price}</span>
-                </p>
-
-                <ul className={'mt-6 space-y-2.5 border-t pt-5 text-sm ' + (b.popular ? 'border-white/25' : 'border-white/10')}>
-                  <li className="flex items-center gap-2">
-                    <Clock className={'h-4 w-4 ' + (b.popular ? 'text-sun' : 'text-coral')} /> {b.duration}
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Smartphone className={'h-4 w-4 ' + (b.popular ? 'text-sun' : 'text-coral')} /> {b.devices} device{b.devices > 1 ? 's' : ''}
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Zap className={'h-4 w-4 ' + (b.popular ? 'text-sun' : 'text-coral')} /> Unlimited data
-                  </li>
-                </ul>
-
-                <p className={'mt-5 flex-1 text-sm leading-relaxed ' + (b.popular ? 'text-white/85' : 'text-white/60')}>{b.blurb}</p>
-
-                <a
-                  href="#how"
-                  className={'mt-6 w-full ' + (b.popular ? 'btn-sun' : 'btn !bg-white !text-night hover:!bg-cream')}
+        <div className="-mx-5 mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-6 pt-5 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 md:grid-cols-3 xl:grid-cols-5 [&::-webkit-scrollbar]:hidden">
+          {BUNDLES.map((b, i) => {
+            const hot = !!b.popular;
+            return (
+              <Reveal key={b.id} delay={i * 0.06} className="h-full w-[74%] shrink-0 snap-center sm:w-auto">
+                <article
+                  className={
+                    'relative flex h-full flex-col overflow-hidden rounded-lg bg-card text-ink shadow-[0_20px_44px_-26px_rgba(14,27,77,0.55)] ring-1 transition-transform duration-300 hover:-translate-y-1.5 ' +
+                    (hot ? 'ring-2 ring-coral' : 'ring-ink/10')
+                  }
                 >
-                  Get {b.name}
-                </a>
-              </article>
-            </Reveal>
-          ))}
+                  {/* Coloured top with a curved lower edge */}
+                  <div className={'relative px-6 pb-14 pt-10 text-center text-white ' + (hot ? 'bg-coral' : 'bg-night')}>
+                    <span
+                      className={
+                        'absolute left-1/2 top-0 -translate-x-1/2 rounded-b-md px-4 py-1 font-display text-[11px] font-semibold uppercase tracking-wider ' +
+                        (hot ? 'bg-night text-white' : 'bg-coral text-white')
+                      }
+                    >
+                      {hot ? 'Best value' : b.name}
+                    </span>
+                    <p className="font-display text-lg font-semibold">{hot ? b.name : b.swahili}</p>
+                    <svg className="absolute inset-x-0 -bottom-px h-8 w-full text-card" viewBox="0 0 100 20" preserveAspectRatio="none" aria-hidden="true">
+                      <path d="M0 20 C 30 0, 70 0, 100 20 Z" fill="currentColor" />
+                    </svg>
+                  </div>
+
+                  {/* Duration in a ringed circle, overlapping the curve */}
+                  <div className="relative -mt-12 flex justify-center">
+                    <span
+                      className={
+                        'inline-flex h-20 w-20 flex-col items-center justify-center rounded-full bg-card font-display ring-4 ' +
+                        (hot ? 'text-coral ring-coral' : 'text-night ring-night dark:text-white dark:ring-white/70')
+                      }
+                    >
+                      <span className="text-lg font-bold leading-none">{shortDuration(b.duration).split(' ')[0]}</span>
+                      <span className="text-[11px] font-semibold uppercase">{shortDuration(b.duration).split(' ')[1]}</span>
+                    </span>
+                  </div>
+
+                  <div className="flex flex-1 flex-col px-6 pb-7 pt-5 text-center">
+                    <p className="font-display text-3xl font-bold tracking-tight">
+                      <span className="text-base font-semibold text-ink/60">KES </span>
+                      {b.price}
+                    </p>
+                    <p className="mt-1 text-xs text-ink/55">{b.blurb}</p>
+
+                    <ul className="mt-6 flex-1 space-y-2.5 text-left text-sm">
+                      {[b.duration + ' of access', 'Unlimited data', `${b.devices} device${b.devices > 1 ? 's' : ''}`, 'Pay with M-Pesa'].map((f) => (
+                        <li key={f} className="flex items-center gap-2.5 text-ink/75">
+                          <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-coral/10 text-coral">
+                            <Check className="h-3 w-3" strokeWidth={3} />
+                          </span>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <a
+                      href="#how"
+                      className={'btn mt-7 w-full uppercase tracking-wide text-white ' + (hot ? 'bg-coral hover:bg-coral-600' : 'bg-night hover:bg-night-700 dark:bg-white dark:text-night')}
+                    >
+                      Get {b.name}
+                    </a>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
 
-        <p className="mt-3 text-center text-xs text-white/40 sm:hidden">Swipe to see all bundles →</p>
+        <p className="mt-3 text-center text-xs text-ink/45 sm:hidden">Swipe to see all bundles →</p>
 
-        <p className="mt-10 text-center text-sm text-white/50">
+        <p className="mt-10 text-center text-sm text-ink/60">
           Need WiFi for a whole building or event?{' '}
-          <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="font-semibold text-sun underline underline-offset-4">
+          <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="font-semibold text-coral underline underline-offset-4">
             Ask us for a custom plan
           </a>
           .

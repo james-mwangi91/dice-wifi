@@ -5,17 +5,17 @@
 @layer base {
   /* Theme tokens as RGB channels so Tailwind opacity modifiers work */
   :root {
-    --surface: 236 237 243; /* soft grey-lavender */
-    --card: 247 247 250;
-    --ink: 20 33 61; /* navy */
-    --soft: 226 229 239;
+    --surface: 244 246 251; /* light grey section */
+    --card: 255 255 255;
+    --ink: 14 27 77; /* deep navy */
+    --soft: 234 238 248;
     color-scheme: light;
   }
   .dark {
-    --surface: 9 15 30;
-    --card: 20 33 61;
-    --ink: 236 238 245;
-    --soft: 14 23 43;
+    --surface: 6 11 32;
+    --card: 14 27 77;
+    --ink: 236 239 248;
+    --soft: 10 18 50;
     color-scheme: dark;
   }
   html {
@@ -42,7 +42,7 @@
   }
   /* Hand-drawn sun underline for highlighted words */
   .squiggle {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%23F26B1D' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%23E11D2E' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-size: 100% 0.32em;
     background-position: 0 100%;
@@ -51,13 +51,13 @@
   /* Circle filled with diagonal coral stripes — decorative accent */
   .stripe-disc {
     @apply rounded-full;
-    background-image: repeating-linear-gradient(-45deg, rgb(242 107 29 / 0.5) 0 2px, transparent 2px 9px);
+    background-image: repeating-linear-gradient(-45deg, rgb(225 29 46 / 0.45) 0 2px, transparent 2px 9px);
   }
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 font-display text-[15px] font-bold transition-all duration-200 active:scale-[0.97];
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-6 py-3.5 font-display text-sm font-semibold transition-all duration-200 active:scale-[0.97];
   }
   .btn-coral {
-    @apply btn bg-coral text-white shadow-[0_10px_24px_-10px_rgba(242,107,29,0.7)] hover:bg-coral-600;
+    @apply btn bg-coral text-white shadow-[0_10px_24px_-10px_rgba(225,29,46,0.55)] hover:bg-coral-600;
   }
   .btn-sun {
     @apply btn bg-sun text-night hover:brightness-95;
@@ -68,8 +68,15 @@
   .btn-ghost {
     @apply btn border-2 border-ink/15 text-ink hover:border-ink;
   }
+  /* Theme-style label: red caps with a short double rule in front */
   .eyebrow {
-    @apply inline-flex items-center gap-2 rounded-full bg-coral-100 px-3.5 py-1.5 font-display text-xs font-bold uppercase tracking-[0.14em] text-coral-600 dark:bg-coral/15 dark:text-coral;
+    @apply inline-flex items-center gap-2.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-coral dark:text-sun;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply inline-block h-[3px] w-7 rounded-full;
+    background: linear-gradient(currentColor, currentColor) 0 0 / 100% 1px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 100% / 60% 1px no-repeat;
   }
 }
 

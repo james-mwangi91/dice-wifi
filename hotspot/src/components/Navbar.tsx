@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useScroll, useSpring } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Mail, MapPin, Menu, Phone, X } from 'lucide-react';
+import { BRAND } from '../data';
 import Logo from './Logo';
 import ThemeToggle from './ThemeToggle';
 
@@ -39,19 +40,43 @@ export default function Navbar() {
     <>
       <header
         className={
-          /* Solid navy in both themes so the links always read clearly */
-          'fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night/95 text-white backdrop-blur-xl transition-all duration-300 dark:bg-[#0E1830]/95 ' +
-          (scrolled ? 'py-3 shadow-[0_10px_30px_-12px_rgba(20,33,61,0.55)]' : 'py-4')
+          'fixed inset-x-0 top-0 z-50 transition-shadow duration-300 ' +
+          (scrolled ? 'shadow-[0_10px_30px_-14px_rgba(14,27,77,0.45)]' : '')
         }
       >
+        {/* Thin navy info bar, as in the theme; folds away once you scroll */}
+        <div
+          className={
+            'overflow-hidden bg-night text-white/80 transition-all duration-300 dark:bg-[#040817] ' +
+            (scrolled ? 'max-h-0' : 'max-h-12')
+          }
+        >
+          <div className="container-x hidden items-center justify-between py-2 text-xs md:flex">
+            <div className="flex items-center gap-6">
+              <a href={BRAND.phoneHref} className="flex items-center gap-1.5 hover:text-white">
+                <Phone className="h-3.5 w-3.5 text-sun" /> {BRAND.phone}
+              </a>
+              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-1.5 hover:text-white">
+                <Mail className="h-3.5 w-3.5 text-sun" /> {BRAND.email}
+              </a>
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5 text-sun" /> Nairobi &amp; satellite towns
+              </span>
+            </div>
+            <span>Pay with M-Pesa · Support 24/7</span>
+          </div>
+        </div>
+
+        {/* Main bar: white in light mode, navy in dark mode */}
+        <div className="border-b border-ink/10 bg-card/95 backdrop-blur-xl dark:border-white/10 dark:bg-[#0A1440]/95">
         <motion.div
           className="absolute inset-x-0 top-0 h-[3px] origin-left bg-coral"
           style={{ scaleX: progress }}
           aria-hidden="true"
         />
-        <nav className="container-x flex items-center justify-between gap-6" aria-label="Main navigation">
+        <nav className="container-x flex items-center justify-between gap-6 py-3.5" aria-label="Main navigation">
           <a href="#top" aria-label="DICE Hotspot — back to top">
-            <Logo light />
+            <Logo />
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
@@ -60,8 +85,8 @@ export default function Navbar() {
                 <a
                   href={l.href}
                   className={
-                    'rounded-full px-4 py-2 font-display text-[15px] font-semibold transition-colors ' +
-                    'text-white/80 hover:bg-white/10 hover:text-white'
+                    'relative px-3.5 py-2 font-display text-sm font-semibold uppercase tracking-wide text-ink/80 transition-colors hover:text-coral ' +
+                    "after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-coral after:transition-transform after:content-[''] hover:after:scale-x-100"
                   }
                 >
                   {l.label}
@@ -71,7 +96,7 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle onDark />
+            <ThemeToggle />
             <a href="#bundles" className="btn-coral hidden !px-5 !py-2.5 !text-sm sm:inline-flex">
               Buy a bundle
             </a>
@@ -83,13 +108,14 @@ export default function Navbar() {
               aria-controls="mobile-menu"
               className={
                 'inline-flex h-11 w-11 items-center justify-center rounded-full border-2 lg:hidden ' +
-                'border-white/25 text-white'
+                'border-ink/15 text-ink'
               }
             >
               <Menu className="h-5 w-5" />
             </button>
           </div>
         </nav>
+        </div>
       </header>
 
       <AnimatePresence>
