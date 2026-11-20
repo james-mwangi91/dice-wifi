@@ -15,7 +15,7 @@ export default function DealsStrip() {
   };
 
   return (
-    <section aria-label="Find DICE Hotspot near you" className="relative overflow-hidden bg-night py-14 text-white dark:bg-[#0A1440]">
+    <section aria-label="Find DICE Hotspot near you" className="relative overflow-hidden bg-night py-14 text-white dark:bg-night">
       {/* Angled red slice on the right, echoing the theme */}
       <div className="pointer-events-none absolute -right-24 top-0 hidden h-full w-72 -skew-x-[20deg] bg-coral/90 lg:block" aria-hidden="true" />
       <div className="container-x relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
