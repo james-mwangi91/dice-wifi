@@ -3,7 +3,7 @@ import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../theme';
 
 /** Sun/moon switch. `onDark` styles it for the transparent nav over the hero photo. */
-export default function ThemeToggle({ onDark = false }: { onDark?: boolean }) {
+export default function ThemeToggle({ onDark = false, variant }: { onDark?: boolean; variant?: 'nav' }) {
   const { theme, toggle } = useTheme();
   const dark = theme === 'dark';
 
@@ -15,7 +15,11 @@ export default function ThemeToggle({ onDark = false }: { onDark?: boolean }) {
       title={dark ? 'Light theme' : 'Dark theme'}
       className={
         'relative inline-flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border-2 transition-colors ' +
-        (onDark ? 'border-white/30 text-white hover:bg-white/10' : 'border-ink/15 text-ink hover:border-ink/40')
+        (variant === 'nav'
+          ? 'border-white/30 text-white hover:bg-white/10 dark:border-night/20 dark:text-night dark:hover:bg-night/5'
+          : onDark
+            ? 'border-white/30 text-white hover:bg-white/10'
+            : 'border-ink/15 text-ink hover:border-ink/40')
       }
     >
       <AnimatePresence mode="wait" initial={false}>
