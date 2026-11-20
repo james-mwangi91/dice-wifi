@@ -129,9 +129,10 @@ export default function Hero() {
       <div className="stripe-disc pointer-events-none absolute -left-28 bottom-6 h-56 w-56 opacity-60" aria-hidden="true" />
       <div className="stripe-disc pointer-events-none absolute right-[6%] top-24 hidden h-24 w-24 animate-spin-slow opacity-80 md:block" aria-hidden="true" />
 
-      <div className="container-x relative grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
-        {/* Copy */}
-        <div className="lg:col-span-6">
+      {/* Phones: title, then the blob, then buttons and prices.
+          Desktop: copy on the left (title above actions), blob on the right. */}
+      <div className="container-x relative grid gap-y-10 lg:grid-cols-12 lg:gap-x-10 lg:gap-y-8">
+        <div className="lg:col-span-6 lg:col-start-1 lg:row-start-1 lg:self-end">
           <motion.p
             className="eyebrow"
             initial={reduced ? false : { opacity: 0, y: 10 }}
@@ -146,7 +147,7 @@ export default function Hero() {
           </div>
 
           <motion.p
-            className="mt-6 max-w-lg text-lg leading-relaxed text-ink/70"
+            className="mt-6 hidden max-w-lg text-lg leading-relaxed text-ink/70 lg:block"
             initial={reduced ? false : { opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.45, ease: EASE }}
@@ -155,44 +156,10 @@ export default function Hero() {
             apartments, cafés, stages and hostels in Rongai, Banana and Kiserian — unlimited data from{' '}
             <strong className="font-semibold text-accent">KES 10 an hour</strong>, paid with M-Pesa.
           </motion.p>
-
-          <motion.div
-            className="mt-8 flex flex-wrap items-center gap-3"
-            initial={reduced ? false : { opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
-          >
-            <a href="#bundles" className="btn-coral">
-              Buy a bundle <ArrowRight className="h-4 w-4" />
-            </a>
-            <a href="#how" className="btn-ghost">
-              How to connect
-            </a>
-          </motion.div>
-
-          {/* Quick prices */}
-          <motion.ul
-            className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-ink/10 pt-6"
-            initial={reduced ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
-            {quick.map((b) => (
-              <li key={b.id}>
-                <a href="#bundles" className="group block">
-                  <span className="block font-display text-3xl font-black text-ink transition-colors group-hover:text-accent">
-                    <span className="text-base font-bold">KES </span>
-                    {b.price}
-                  </span>
-                  <span className="text-sm text-ink/60">{b.duration}</span>
-                </a>
-              </li>
-            ))}
-          </motion.ul>
         </div>
 
         {/* Photo in a breathing blob */}
-        <div className="relative mx-auto w-full max-w-[34rem] lg:col-span-6 lg:max-w-none lg:pl-6">
+        <div className="relative mx-auto w-full max-w-[34rem] lg:col-span-6 lg:col-start-7 lg:row-span-2 lg:row-start-1 lg:max-w-none lg:self-center lg:pl-6">
           <motion.div
             className="relative"
             initial={reduced ? false : { opacity: 0, scale: 0.92 }}
@@ -277,6 +244,42 @@ export default function Hero() {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="lg:col-span-6 lg:col-start-1 lg:row-start-2 lg:self-start">
+          <motion.div
+            className="flex flex-wrap items-center gap-3"
+            initial={reduced ? false : { opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
+          >
+            <a href="#bundles" className="btn-coral">
+              Buy a bundle <ArrowRight className="h-4 w-4" />
+            </a>
+            <a href="#how" className="btn-ghost">
+              How to connect
+            </a>
+          </motion.div>
+
+          {/* Quick prices */}
+          <motion.ul
+            className="mt-10 flex flex-wrap gap-x-8 gap-y-4 border-t border-ink/10 pt-6"
+            initial={reduced ? false : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
+            {quick.map((b) => (
+              <li key={b.id}>
+                <a href="#bundles" className="group block">
+                  <span className="block font-display text-3xl font-black text-ink transition-colors group-hover:text-accent">
+                    <span className="text-base font-bold">KES </span>
+                    {b.price}
+                  </span>
+                  <span className="text-sm text-ink/60">{b.duration}</span>
+                </a>
+              </li>
+            ))}
+          </motion.ul>
         </div>
       </div>
     </section>

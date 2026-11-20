@@ -119,7 +119,7 @@ export default function Navbar() {
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <ul className="mt-12 space-y-2">
+            <ul className="mt-8 divide-y divide-white/10 border-y border-white/10">
               {LINKS.map((l, i) => (
                 <motion.li
                   key={l.href}
@@ -130,7 +130,7 @@ export default function Navbar() {
                   <a
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="block py-3 font-display text-4xl font-black tracking-tight transition-colors hover:text-sun"
+                    className="block py-4 font-display text-lg font-medium text-white/90 transition-colors hover:text-sun"
                   >
                     {l.label}
                   </a>
