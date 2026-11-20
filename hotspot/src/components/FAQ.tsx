@@ -13,7 +13,7 @@ export default function FAQ() {
       <div className="container-x grid gap-12 lg:grid-cols-12">
         <Reveal className="lg:col-span-4">
           <span className="eyebrow">FAQ</span>
-          <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl">Quick answers.</h2>
+          <h2 className="mt-5 font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-5xl">Quick answers.</h2>
           <p className="mt-5 text-lg text-ink/70">Stuck on the WiFi page? We reply on WhatsApp within minutes.</p>
           <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="btn mt-8 bg-[#25D366] text-night hover:brightness-95">
             <MessageCircle className="h-4 w-4" /> WhatsApp support
@@ -24,7 +24,7 @@ export default function FAQ() {
           {FAQS.map((f, i) => {
             const isOpen = open === i;
             return (
-              <div key={f.q} className={'rounded-[1.5rem] transition-colors ' + (isOpen ? 'bg-surface' : 'bg-surface/50 hover:bg-surface')}>
+              <div key={f.q} className={'rounded-lg transition-colors ' + (isOpen ? 'bg-surface' : 'bg-surface/50 hover:bg-surface')}>
                 <h3>
                   <button
                     type="button"

@@ -22,17 +22,17 @@ export default function Host() {
               sizes="(min-width: 1024px) 30vw, 60vw"
               alt={VENUE_IMAGES.shop.alt}
               loading="lazy"
-              className="col-span-3 aspect-[4/5] w-full rounded-[2rem] object-cover"
+              className="col-span-3 aspect-[4/5] w-full rounded-xl object-cover"
             />
             <div className="col-span-2 flex flex-col gap-4">
               <img
                 src={unsplash(VENUE_IMAGES.cafe.id, 900, 900)}
                 alt={VENUE_IMAGES.cafe.alt}
                 loading="lazy"
-                className="aspect-square w-full rounded-[2rem] object-cover"
+                className="aspect-square w-full rounded-xl object-cover"
               />
-              <div className="flex flex-1 flex-col justify-end rounded-[2rem] bg-coral p-5 text-white">
-                <p className="font-display text-4xl font-black leading-none">0</p>
+              <div className="flex flex-1 flex-col justify-end rounded-xl bg-coral p-5 text-white">
+                <p className="font-display text-4xl font-bold leading-none">0</p>
                 <p className="mt-1 text-sm font-medium text-white/85">KES upfront to get started</p>
               </div>
             </div>
@@ -42,7 +42,7 @@ export default function Host() {
         <div className="order-1 lg:order-2">
           <Reveal>
             <span className="eyebrow">For venue owners</span>
-            <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+            <h2 className="mt-5 font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
               Turn your WiFi into <span className="squiggle">extra income.</span>
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-ink/70">

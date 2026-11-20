@@ -1,13 +1,21 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Coffee, GraduationCap, Building2, Bus, MapPin, Search } from 'lucide-react';
 import { SPOT_AREAS, VENUE_TYPES } from '../data';
 import Reveal from './Reveal';
+import { SPOT_SEARCH_EVENT } from './DealsStrip';
 
 const VENUE_ICONS = [Building2, Coffee, Bus, GraduationCap];
 
 /** Where to find DICE Hotspot — searchable area list + venue types */
 export default function Spots() {
   const [q, setQ] = useState('');
+
+  /* The navy search strip further up can fill this search in */
+  useEffect(() => {
+    const on = (e: Event) => setQ(String((e as CustomEvent<string>).detail ?? ''));
+    window.addEventListener(SPOT_SEARCH_EVENT, on);
+    return () => window.removeEventListener(SPOT_SEARCH_EVENT, on);
+  }, []);
   const results = useMemo(() => {
     const s = q.trim().toLowerCase();
     return s ? SPOT_AREAS.filter((a) => a.name.toLowerCase().includes(s)) : SPOT_AREAS;
@@ -18,8 +26,8 @@ export default function Spots() {
       <div className="container-x">
         <Reveal className="max-w-2xl">
           <span className="eyebrow !bg-card">Find a spot</span>
-          <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
-            Look for the <span className="text-coral">orange sign.</span>
+          <h2 className="mt-5 font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
+            Look for the <span className="text-coral">red sign.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink/70">
             DICE Hotspot is live across these areas, with new spots switching on every month.
@@ -27,7 +35,7 @@ export default function Spots() {
         </Reveal>
 
         <div className="mt-12 grid gap-6 lg:grid-cols-5">
-          <Reveal className="rounded-[2rem] bg-card p-6 sm:p-8 lg:col-span-2">
+          <Reveal className="rounded-xl bg-card p-6 sm:p-8 lg:col-span-2">
             <label htmlFor="spot-search" className="font-display text-lg font-bold">
               Search your area
             </label>
@@ -70,7 +78,7 @@ export default function Spots() {
               const Icon = VENUE_ICONS[i];
               return (
                 <Reveal key={v.title} delay={i * 0.06} className="h-full">
-                  <div className="flex h-full flex-col rounded-[2rem] bg-card p-7">
+                  <div className="flex h-full flex-col rounded-xl bg-card p-7">
                     <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-night text-sun dark:bg-sun dark:text-night">
                       <Icon className="h-6 w-6" />
                     </span>

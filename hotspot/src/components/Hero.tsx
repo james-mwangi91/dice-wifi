@@ -82,7 +82,7 @@ function FloatBadge({ className, delay, children }: { className: string; delay: 
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ duration: 0.6, delay, ease: EASE }}
     >
-      <div className="animate-float rounded-2xl bg-card/95 px-4 py-3 shadow-[0_18px_40px_-18px_rgba(20,33,61,0.45)] ring-1 ring-ink/5 backdrop-blur motion-reduce:animate-none">
+      <div className="animate-float rounded-2xl bg-card/95 px-4 py-3 shadow-[0_18px_40px_-18px_rgba(14,27,77,0.45)] ring-1 ring-ink/5 backdrop-blur motion-reduce:animate-none">
         {children}
       </div>
     </motion.div>
@@ -209,7 +209,7 @@ export default function Hero() {
             />
 
             <div
-              className="relative aspect-square animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(20,33,61,0.6)] motion-reduce:animate-none"
+              className="relative aspect-square animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(14,27,77,0.6)] motion-reduce:animate-none"
               role="region"
               aria-roledescription="carousel"
               aria-label="DICE Hotspot in everyday life"

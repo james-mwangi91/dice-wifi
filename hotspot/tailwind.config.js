@@ -4,13 +4,13 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      /* Navy & orange. Token names are kept from the first theme:
-         night = navy, coral = orange, sun = soft peach (small details only). */
+      /* Navy & red ISP theme. Token names are kept from the first theme:
+         night = deep navy, coral = signal red, sun = light red for details on navy. */
       colors: {
-        night: { DEFAULT: '#14213D', 800: '#1B2B4D', 700: '#24375E', 600: '#304775' },
-        coral: { DEFAULT: '#F26B1D', 600: '#D95A10', 100: '#FDE5D5' },
-        sun: { DEFAULT: '#FFB37A', 100: '#FBE7D8' },
-        cream: '#ECEDF3',
+        night: { DEFAULT: '#0E1B4D', 800: '#15245E', 700: '#1D2F73', 600: '#2A3F8F' },
+        coral: { DEFAULT: '#E11D2E', 600: '#C21424', 100: '#FDE4E6' },
+        sun: { DEFAULT: '#FF7A86', 100: '#FFE3E6' },
+        cream: '#F4F6FB',
         /* Theme-aware tokens (see index.css): flip between light and dark */
         surface: 'rgb(var(--surface) / <alpha-value>)',
         card: 'rgb(var(--card) / <alpha-value>)',
@@ -20,7 +20,7 @@ export default {
       },
       fontFamily: {
         sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
-        display: ['Outfit', '"DM Sans"', 'system-ui', 'sans-serif'],
+        display: ['Poppins', '"DM Sans"', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         progress: { from: { transform: 'scaleX(0)' }, to: { transform: 'scaleX(1)' } },
