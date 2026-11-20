@@ -1,36 +1,47 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Wifi } from 'lucide-react';
-import { BUNDLES, HERO_SLIDES, unsplash, unsplashSet } from '../data';
+import { BUNDLES } from '../data';
 import heroLarge from '../assets/hero-friends-1169.webp';
 import heroSmall from '../assets/hero-friends-640.webp';
+import connectedLarge from '../assets/hero-connected-1536.webp';
+import connectedSmall from '../assets/hero-connected-800.webp';
+import phoneImg from '../assets/hero-phone-612.webp';
 
 const SLIDE_MS = 6500;
 const EASE = [0.22, 1, 0.36, 1] as const;
-/* The blob frame is a touch taller than wide, like the hero photo */
-const RATIO = 1169 / 1345;
-
 interface BlobSlide {
   key: string;
   src: string;
   srcSet: string;
   alt: string;
+  /** object-position inside the square blob, so faces stay in frame */
+  pos: string;
 }
 
-/* Our own photo leads; the stock photos follow in the same frame */
+/* DICE's own photos, shown in the blob */
 const SLIDES: BlobSlide[] = [
   {
     key: 'friends',
     src: heroLarge,
     srcSet: `${heroSmall} 640w, ${heroLarge} 1169w`,
     alt: 'Five friends on a sofa streaming, gaming and browsing on phones, a tablet and laptops',
+    pos: '50% 75%',
   },
-  ...HERO_SLIDES.filter((s) => s.id !== '1611348524140-53c9a25263d6').map((s) => ({
-    key: s.id,
-    src: unsplash(s.id, 1200, Math.round(1200 / RATIO)),
-    srcSet: unsplashSet(s.id, RATIO, [640, 900, 1200]),
-    alt: s.alt,
-  })),
+  {
+    key: 'connected',
+    src: connectedLarge,
+    srcSet: `${connectedSmall} 800w, ${connectedLarge} 1536w`,
+    alt: 'Two smiling friends at a DICE WiFi Hotspot sign, one holding a phone that shows Connected',
+    pos: '50% 50%',
+  },
+  {
+    key: 'phone',
+    src: phoneImg,
+    srcSet: `${phoneImg} 612w`,
+    alt: 'Hands holding a smartphone with a glowing WiFi signal above it',
+    pos: '50% 50%',
+  },
 ];
 
 /** Headline that rises in word by word */
@@ -91,8 +102,7 @@ export default function Hero() {
 
   useEffect(() => {
     if (!playing) return;
-    /* Our own photo stays up a little longer than the rest */
-    const t = window.setTimeout(() => go(index + 1), index === 0 ? SLIDE_MS * 1.5 : SLIDE_MS);
+    const t = window.setTimeout(() => go(index + 1), SLIDE_MS);
     return () => window.clearTimeout(t);
   }, [index, playing, go]);
 
@@ -199,7 +209,7 @@ export default function Hero() {
             />
 
             <div
-              className="relative aspect-[1169/1345] animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(30,11,58,0.6)] motion-reduce:animate-none"
+              className="relative aspect-square animate-blob overflow-hidden bg-night-700 shadow-[0_40px_80px_-35px_rgba(30,11,58,0.6)] motion-reduce:animate-none"
               role="region"
               aria-roledescription="carousel"
               aria-label="DICE Hotspot in everyday life"
@@ -217,6 +227,7 @@ export default function Hero() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ opacity: { duration: 1.1 }, scale: { duration: 6, ease: 'easeOut' } }}
+                  style={{ objectPosition: slide.pos }}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </AnimatePresence>
@@ -231,7 +242,7 @@ export default function Hero() {
                   <span className="absolute inline-flex h-full w-full rounded-full bg-mpesa animate-ping-soft" />
                   <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-mpesa" />
                 </span>
-                5 devices online
+                Connected in seconds
               </p>
             </FloatBadge>
 
