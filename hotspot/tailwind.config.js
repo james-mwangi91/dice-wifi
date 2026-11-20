@@ -33,6 +33,13 @@ export default {
         },
         float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
         marquee: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-50%)' } },
+        /* Organic shape that slowly breathes — the hero image mask */
+        blob: {
+          '0%, 100%': { borderRadius: '58% 42% 38% 62% / 52% 44% 56% 48%' },
+          '33%': { borderRadius: '44% 56% 52% 48% / 60% 38% 62% 40%' },
+          '66%': { borderRadius: '62% 38% 46% 54% / 42% 58% 42% 58%' },
+        },
+        'spin-slow': { to: { transform: 'rotate(360deg)' } },
         'ping-soft': {
           '0%': { transform: 'scale(1)', opacity: '0.8' },
           '75%, 100%': { transform: 'scale(2.2)', opacity: '0' },
@@ -44,6 +51,8 @@ export default {
         ripple: 'ripple 3.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite',
         float: 'float 5s ease-in-out infinite',
         marquee: 'marquee 40s linear infinite',
+        blob: 'blob 14s ease-in-out infinite',
+        'spin-slow': 'spin-slow 40s linear infinite',
       },
     },
   },
