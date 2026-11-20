@@ -39,8 +39,9 @@ export default function Navbar() {
     <>
       <header
         className={
-          'fixed inset-x-0 top-0 z-50 transition-all duration-300 ' +
-          (scrolled ? 'bg-surface/90 py-3 shadow-[0_1px_0_rgb(var(--ink)/0.08)] backdrop-blur-xl' : 'py-5')
+          /* Solid navy in both themes so the links always read clearly */
+          'fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night/95 text-white backdrop-blur-xl transition-all duration-300 dark:bg-[#0E1830]/95 ' +
+          (scrolled ? 'py-3 shadow-[0_10px_30px_-12px_rgba(20,33,61,0.55)]' : 'py-4')
         }
       >
         <motion.div
@@ -50,7 +51,7 @@ export default function Navbar() {
         />
         <nav className="container-x flex items-center justify-between gap-6" aria-label="Main navigation">
           <a href="#top" aria-label="DICE Hotspot — back to top">
-            <Logo />
+            <Logo light />
           </a>
 
           <ul className="hidden items-center gap-1 lg:flex">
@@ -60,7 +61,7 @@ export default function Navbar() {
                   href={l.href}
                   className={
                     'rounded-full px-4 py-2 font-display text-[15px] font-semibold transition-colors ' +
-                    'text-ink/70 hover:bg-ink/5 hover:text-ink'
+                    'text-white/80 hover:bg-white/10 hover:text-white'
                   }
                 >
                   {l.label}
@@ -70,7 +71,7 @@ export default function Navbar() {
           </ul>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
+            <ThemeToggle onDark />
             <a href="#bundles" className="btn-coral hidden !px-5 !py-2.5 !text-sm sm:inline-flex">
               Buy a bundle
             </a>
@@ -82,7 +83,7 @@ export default function Navbar() {
               aria-controls="mobile-menu"
               className={
                 'inline-flex h-11 w-11 items-center justify-center rounded-full border-2 lg:hidden ' +
-                'border-ink/15 text-ink'
+                'border-white/25 text-white'
               }
             >
               <Menu className="h-5 w-5" />

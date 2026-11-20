@@ -19,7 +19,7 @@ export default function Spots() {
         <Reveal className="max-w-2xl">
           <span className="eyebrow !bg-card">Find a spot</span>
           <h2 className="mt-5 font-display text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
-            Look for the <span className="text-coral">coral sign.</span>
+            Look for the <span className="text-coral">orange sign.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink/70">
             DICE Hotspot is live across these areas, with new spots switching on every month.

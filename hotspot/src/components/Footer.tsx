@@ -5,7 +5,7 @@ import Logo from './Logo';
 /** Closing CTA band + footer */
 export default function Footer() {
   return (
-    <footer className="bg-night text-white dark:bg-[#0B0318]">
+    <footer className="bg-night text-white dark:bg-[#060B16]">
       <div className="container-x py-20 lg:py-24">
         <div className="relative overflow-hidden rounded-[2.5rem] bg-coral px-7 py-14 sm:px-12 lg:px-16 lg:py-20">
           <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-sun sm:-right-16 sm:-top-16 sm:h-64 sm:w-64" aria-hidden="true" />

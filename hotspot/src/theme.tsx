@@ -13,7 +13,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.classList.toggle('dark', theme === 'dark');
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#110622' : '#1E0B3A');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#090F1E' : '#14213D');
   }, [theme]);
 
   /* Follow the OS setting until the visitor makes their own choice */
