@@ -14,11 +14,12 @@
     --night-800: 21 36 94;
     --night-700: 29 47 115;
     --night-600: 42 63 143;
-    --coral: 225 29 46; /* red #E11D2E */
-    --coral-600: 194 20 36;
-    --coral-100: 253 228 230;
-    --sun: 255 122 134;
-    --sun-100: 255 227 230;
+    --coral: 146 0 10; /* crimson #92000A */
+    --coral-600: 110 0 8;
+    --coral-100: 246 224 226;
+    --sun: 231 163 168; /* light tint of #92000A, for details on navy */
+    --sun-100: 248 228 230;
+    --accent-text: 146 0 10; /* #92000A */
     color-scheme: light;
   }
   .dark {
@@ -31,11 +32,12 @@
     --night-800: 27 43 77;
     --night-700: 36 55 94;
     --night-600: 48 71 117;
-    --coral: 242 107 29; /* orange #F26B1D */
-    --coral-600: 217 90 16;
-    --coral-100: 253 229 213;
-    --sun: 255 179 122; /* soft peach */
-    --sun-100: 251 231 216;
+    --coral: 146 0 10; /* crimson #92000A */
+    --coral-600: 110 0 8;
+    --coral-100: 246 224 226;
+    --sun: 231 163 168; /* light tint of #92000A */
+    --sun-100: 248 228 230;
+    --accent-text: 232 88 98; /* brighter crimson #E85862 for text on navy */
     color-scheme: dark;
   }
   html {
@@ -62,14 +64,14 @@
   }
   /* Hand-drawn sun underline for highlighted words */
   .squiggle {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%23E11D2E' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%2392000A' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-size: 100% 0.32em;
     background-position: 0 100%;
     padding-bottom: 0.06em;
   }
   .dark .squiggle {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%23F26B1D' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8 Q 30 2 60 7 T 118 5' stroke='%2392000A' stroke-width='5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   }
   /* Circle filled with diagonal coral stripes — decorative accent */
   .stripe-disc {
@@ -93,7 +95,7 @@
   }
   /* Theme-style label: red caps with a short double rule in front */
   .eyebrow {
-    @apply inline-flex items-center gap-2.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-coral dark:text-sun;
+    @apply inline-flex items-center gap-2.5 font-display text-xs font-semibold uppercase tracking-[0.16em] text-accent;
   }
   .eyebrow::before {
     content: '';

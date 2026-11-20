@@ -58,7 +58,7 @@ function RiseHeadline({ reduced }: { reduced: boolean }) {
         <span key={w.text}>
           <span className="inline-block overflow-hidden pb-[0.08em] align-bottom">
             <motion.span
-              className={'inline-block ' + (w.accent ? 'text-coral' : '')}
+              className={'inline-block ' + (w.accent ? 'text-accent' : '')}
               initial={reduced ? false : { y: '105%' }}
               animate={{ y: 0 }}
               transition={{ duration: 0.75, delay: 0.1 + i * 0.09, ease: EASE }}
@@ -153,7 +153,7 @@ export default function Hero() {
           >
             Stream, game, study and scroll together. Join <strong className="font-semibold text-ink">DICE Hotspot</strong> at
             estates, cafés and stages across Nairobi — unlimited data from{' '}
-            <strong className="font-semibold text-coral">KES 10 an hour</strong>, paid with M-Pesa.
+            <strong className="font-semibold text-accent">KES 10 an hour</strong>, paid with M-Pesa.
           </motion.p>
 
           <motion.div
@@ -180,7 +180,7 @@ export default function Hero() {
             {quick.map((b) => (
               <li key={b.id}>
                 <a href="#bundles" className="group block">
-                  <span className="block font-display text-3xl font-black text-ink transition-colors group-hover:text-coral">
+                  <span className="block font-display text-3xl font-black text-ink transition-colors group-hover:text-accent">
                     <span className="text-base font-bold">KES </span>
                     {b.price}
                   </span>
@@ -248,7 +248,7 @@ export default function Hero() {
 
             <FloatBadge className="-right-2 bottom-[16%] sm:-right-6" delay={1.1}>
               <p className="flex items-center gap-2.5">
-                <CheckCircle2 className="h-6 w-6 text-coral" />
+                <CheckCircle2 className="h-6 w-6 text-accent" />
                 <span>
                   <span className="block font-display text-lg font-black leading-none text-ink">KES 40</span>
                   <span className="text-xs text-ink/60">24 hrs · paid via M-Pesa</span>

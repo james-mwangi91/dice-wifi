@@ -14,7 +14,7 @@ export default function Logo({ light = false, variant }: { light?: boolean; vari
         <circle cx="48" cy="16" r="5" fill="#FFFFFF" />
       </svg>
       <span className={'font-display text-xl font-black leading-none tracking-tight ' + (nav ? 'text-white dark:text-night' : light ? 'text-white' : 'text-ink')}>
-        DICE<span className="text-coral"> Hotspot</span>
+        DICE<span className={nav ? "text-[rgb(232_88_98)] dark:text-[rgb(146_0_10)]" : light ? "text-[rgb(232_88_98)]" : "text-accent"}> Hotspot</span>
       </span>
     </span>
   );

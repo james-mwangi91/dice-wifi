@@ -50,7 +50,7 @@ export default function Footer() {
               <ul className="mt-4 space-y-2.5 text-sm">
                 {LINKS.map((l) => (
                   <li key={l.href}>
-                    <a href={l.href} className="text-ink/65 transition-colors hover:text-coral">
+                    <a href={l.href} className="text-ink/65 transition-colors hover:text-accent">
                       {l.label}
                     </a>
                   </li>
@@ -59,14 +59,14 @@ export default function Footer() {
             </nav>
             <div className="space-y-2.5 text-sm">
               <p className="font-display text-sm font-semibold uppercase tracking-wider">Support</p>
-              <a href={BRAND.phoneHref} className="mt-4 flex items-center gap-2.5 text-ink/65 hover:text-coral">
-                <Phone className="h-4 w-4 text-coral" /> {BRAND.phone}
+              <a href={BRAND.phoneHref} className="mt-4 flex items-center gap-2.5 text-ink/65 hover:text-accent">
+                <Phone className="h-4 w-4 text-accent" /> {BRAND.phone}
               </a>
-              <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 text-ink/65 hover:text-coral">
-                <MessageCircle className="h-4 w-4 text-coral" /> WhatsApp us
+              <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 text-ink/65 hover:text-accent">
+                <MessageCircle className="h-4 w-4 text-accent" /> WhatsApp us
               </a>
-              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 text-ink/65 hover:text-coral">
-                <Mail className="h-4 w-4 text-coral" /> {BRAND.email}
+              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 text-ink/65 hover:text-accent">
+                <Mail className="h-4 w-4 text-accent" /> {BRAND.email}
               </a>
             </div>
             <div className="space-y-3 text-sm">

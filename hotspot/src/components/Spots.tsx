@@ -27,7 +27,7 @@ export default function Spots() {
         <Reveal className="max-w-2xl">
           <span className="eyebrow !bg-card">Find a spot</span>
           <h2 className="mt-5 font-display text-4xl font-bold leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">
-            Look for the <span className="text-coral">DICE sign.</span>
+            Look for the <span className="text-accent">DICE sign.</span>
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-ink/70">
             DICE Hotspot is live across these areas, with new spots switching on every month.
@@ -53,7 +53,7 @@ export default function Spots() {
               {results.map((a) => (
                 <li key={a.name} className="flex items-center justify-between py-3.5">
                   <span className="flex items-center gap-2.5 font-semibold">
-                    <MapPin className="h-4 w-4 text-coral" /> {a.name}
+                    <MapPin className="h-4 w-4 text-accent" /> {a.name}
                   </span>
                   <span
                     className={
