@@ -126,7 +126,7 @@ export default function HowItWorks() {
                   aria-pressed={step === i}
                   className={
                     'flex w-full items-start gap-5 rounded-[1.75rem] p-5 text-left transition-all duration-200 sm:p-6 ' +
-                    (step === i ? 'bg-card shadow-[0_20px_40px_-24px_rgba(30,11,58,0.35)]' : 'hover:bg-card/60')
+                    (step === i ? 'bg-card shadow-[0_20px_40px_-24px_rgba(20,33,61,0.35)]' : 'hover:bg-card/60')
                   }
                 >
                   <span
@@ -151,7 +151,7 @@ export default function HowItWorks() {
         <Reveal className="relative mx-auto w-full max-w-[20rem]">
           <div className="absolute -left-16 top-10 h-56 w-56 rounded-full bg-sun/70 blur-0" aria-hidden="true" />
           <div className="absolute -right-10 bottom-6 h-40 w-40 rounded-full bg-coral/80" aria-hidden="true" />
-          <div className="relative aspect-[9/19] animate-float rounded-[3rem] bg-night p-3 ring-1 ring-white/10 motion-reduce:animate-none shadow-[0_40px_80px_-30px_rgba(30,11,58,0.7)]">
+          <div className="relative aspect-[9/19] animate-float rounded-[3rem] bg-night p-3 ring-1 ring-white/10 motion-reduce:animate-none shadow-[0_40px_80px_-30px_rgba(20,33,61,0.7)]">
             <div className="relative h-full overflow-hidden rounded-[2.4rem] bg-cream text-night">
               <div className="absolute left-1/2 top-3 h-6 w-24 -translate-x-1/2 rounded-full bg-night" aria-hidden="true" />
               <PhoneScreen step={step} />

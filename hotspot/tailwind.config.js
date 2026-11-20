@@ -4,12 +4,13 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
-      /* "Nairobi sunset": deep violet night, coral sun, sunshine yellow, warm cream */
+      /* Navy & orange. Token names are kept from the first theme:
+         night = navy, coral = orange, sun = soft peach (small details only). */
       colors: {
-        night: { DEFAULT: '#1E0B3A', 800: '#2A1150', 700: '#3A1A6B', 600: '#4E2A8A' },
-        coral: { DEFAULT: '#FF5A3C', 600: '#E8452A', 100: '#FFE3DC' },
-        sun: { DEFAULT: '#FFC83D', 100: '#FFF1C7' },
-        cream: '#FFF7EE',
+        night: { DEFAULT: '#14213D', 800: '#1B2B4D', 700: '#24375E', 600: '#304775' },
+        coral: { DEFAULT: '#F26B1D', 600: '#D95A10', 100: '#FDE5D5' },
+        sun: { DEFAULT: '#FFB37A', 100: '#FBE7D8' },
+        cream: '#ECEDF3',
         /* Theme-aware tokens (see index.css): flip between light and dark */
         surface: 'rgb(var(--surface) / <alpha-value>)',
         card: 'rgb(var(--card) / <alpha-value>)',
