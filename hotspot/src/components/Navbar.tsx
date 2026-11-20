@@ -8,7 +8,7 @@ const LINKS = [
   { label: 'Bundles', href: '#bundles' },
   { label: 'How it works', href: '#how' },
   { label: 'Find a spot', href: '#spots' },
-  { label: 'Host a hotspot', href: '#host' },
+  { label: 'Free installation', href: '#host' },
   { label: 'FAQ', href: '#faq' },
 ];
 
@@ -51,7 +51,7 @@ export default function Navbar() {
           aria-hidden="true"
         />
         <nav className="container-x flex items-center justify-between gap-6 py-3.5" aria-label="Main navigation">
-          <a href="#top" aria-label="DICE Hotspot — back to top">
+          <a href="#top" aria-label="DICE WIFI — back to top">
             <Logo variant="nav" />
           </a>
 

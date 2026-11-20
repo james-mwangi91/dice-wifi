@@ -1,4 +1,4 @@
-import { ArrowUpRight, Mail, MessageCircle, Phone } from 'lucide-react';
+import { MapPin, MessageCircle, Phone } from 'lucide-react';
 import { BRAND } from '../data';
 import Logo from './Logo';
 
@@ -6,7 +6,7 @@ const LINKS = [
   { label: 'Bundles', href: '#bundles' },
   { label: 'How it works', href: '#how' },
   { label: 'Find a spot', href: '#spots' },
-  { label: 'Host a hotspot', href: '#host' },
+  { label: 'Free installation', href: '#host' },
   { label: 'FAQ', href: '#faq' },
 ];
 
@@ -42,7 +42,7 @@ export default function Footer() {
             <div className="md:col-span-1">
               <Logo />
               <p className="mt-4 text-sm leading-relaxed text-ink/60">
-                Pay-as-you-go WiFi from DICE WiFi, serving Nairobi and its satellite towns.
+                Pay-as-you-go hotspot WiFi in Rongai, Banana and Kiserian. Pay with M-Pesa and you&rsquo;re online.
               </p>
             </div>
             <nav aria-label="Footer">
@@ -65,19 +65,19 @@ export default function Footer() {
               <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="flex items-center gap-2.5 text-ink/65 hover:text-accent">
                 <MessageCircle className="h-4 w-4 text-accent" /> WhatsApp us
               </a>
-              <a href={`mailto:${BRAND.email}`} className="flex items-center gap-2.5 text-ink/65 hover:text-accent">
-                <Mail className="h-4 w-4 text-accent" /> {BRAND.email}
-              </a>
             </div>
-            <div className="space-y-3 text-sm">
-              <p className="font-display text-sm font-semibold uppercase tracking-wider">Need WiFi at home?</p>
-              <p className="text-ink/60">DICE fibre gives homes and offices unlimited internet from KES 1,500 a month.</p>
-              <a href={BRAND.mainSite} className="btn bg-coral !px-5 !py-3 uppercase tracking-wide text-white hover:bg-coral-600">
-                Visit DICE WiFi <ArrowUpRight className="h-4 w-4" />
-              </a>
+            <div className="space-y-2.5 text-sm">
+              <p className="font-display text-sm font-semibold uppercase tracking-wider">Where we are</p>
+              <ul className="mt-4 space-y-2.5">
+                {BRAND.areas.map((a) => (
+                  <li key={a} className="flex items-center gap-2.5 text-ink/65">
+                    <MapPin className="h-4 w-4 text-accent" /> {a}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-          <p className="mt-8 text-center text-xs text-white/50">© {new Date().getFullYear()} DICE WiFi. All rights reserved.</p>
+          <p className="mt-8 text-center text-xs text-white/50">© {new Date().getFullYear()} DICE WIFI. All rights reserved.</p>
         </div>
       </div>
     </footer>

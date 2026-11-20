@@ -3,17 +3,16 @@
 /* ------------------------------------------------------------------ */
 
 export const BRAND = {
-  name: 'DICE Hotspot',
-  ssid: 'DICE Hotspot',
-  phone: '+254 700 000 000',
-  phoneHref: 'tel:+254700000000',
-  whatsappHref:
-    'https://wa.me/254700000000?text=Hi%20DICE%20Hotspot%2C%20I%20have%20a%20question.',
+  name: 'DICE WIFI',
+  /* The WiFi network customers join; the portal greets them as "Sign in to DICE WIFI" */
+  ssid: 'DICE WIFI',
+  phone: '0769 051 010',
+  phoneHref: 'tel:+254769051010',
+  whatsappHref: 'https://wa.me/254769051010?text=Hi%20DICE%20WIFI%2C%20I%20have%20a%20question.',
   hostWhatsappHref:
-    'https://wa.me/254700000000?text=Hi%20DICE%2C%20I%27d%20like%20to%20host%20a%20DICE%20Hotspot%20at%20my%20venue.',
-  email: 'hotspot@dicewifi.co.ke',
-  /* The home & business fibre site lives one level up on the same host */
-  mainSite: '../',
+    'https://wa.me/254769051010?text=Hi%20DICE%20WIFI%2C%20I%27d%20like%20free%20WiFi%20installation%20for%20my%20tenants%20or%20customers.',
+  /* Where we operate */
+  areas: ['Rongai', 'Banana', 'Kiserian'],
 };
 
 /* ------------------------------------------------------------------ */
@@ -78,8 +77,8 @@ export const HERO_SLIDES: Slide[] = [
 ];
 
 export const VENUE_IMAGES = {
-  cafe: { id: '1495474472287-4d71bcdd2085', alt: 'Friends toasting with coffee cups at a café table' },
-  shop: { id: '1556740738-b6a63e27c4df', alt: 'Shop owner serving a customer at a tablet till' },
+  apartments: { id: '1574362848149-11496d93a7c7', alt: 'Block of rental apartments with balconies on a sunny day' },
+  salon: { id: '1562322140-8baeececf3df', alt: 'Hairdresser styling a customer’s hair in a bright salon' },
 };
 
 /* ------------------------------------------------------------------ */
@@ -92,41 +91,36 @@ export interface Bundle {
   swahili: string;
   duration: string;
   price: number;
-  devices: number;
   blurb: string;
   popular?: boolean;
 }
 
+/* The packages sold on the DICE WIFI portal */
 export const BUNDLES: Bundle[] = [
-  { id: '1h', name: 'Quick', swahili: 'Saa moja', duration: '1 hour', price: 10, devices: 1, blurb: 'Check messages, send that CV, top up your playlist.' },
-  { id: '3h', name: 'Chill', swahili: 'Masaa matatu', duration: '3 hours', price: 20, devices: 1, blurb: 'A movie, a match, or an afternoon of assignments.' },
-  { id: '24h', name: 'Daily', swahili: 'Siku nzima', duration: '24 hours', price: 40, devices: 1, blurb: 'All day and all night, for less than a bus fare.', popular: true },
-  { id: '7d', name: 'Weekly', swahili: 'Wiki nzima', duration: '7 days', price: 199, devices: 2, blurb: 'Phone and laptop online all week long.' },
-  { id: '30d', name: 'Monthly', swahili: 'Mwezi mzima', duration: '30 days', price: 599, devices: 3, blurb: 'The whole month for the whole household.' },
+  { id: '1h', name: '1 Hour', swahili: 'Saa moja', duration: '1 hour', price: 10, blurb: 'Check messages, send that CV, top up your playlist.' },
+  { id: '3h', name: '3 Hours', swahili: 'Masaa matatu', duration: '3 hours', price: 15, blurb: 'A movie, a match, or an afternoon of assignments.' },
+  { id: '5h', name: '5 Hours', swahili: 'Masaa matano', duration: '5 hours', price: 20, blurb: 'A full evening of streaming and gaming.' },
+  { id: '24h', name: '24 Hours', swahili: 'Siku nzima', duration: '24 hours', price: 50, blurb: 'All day and all night online.', popular: true },
+  { id: '7d', name: 'Weekly', swahili: 'Wiki nzima', duration: '7 days', price: 250, blurb: 'A whole week online, from Monday to Monday.' },
 ];
 
-export const BUNDLE_PERKS = ['Unlimited data — no caps', 'Speeds up to 10 Mbps', 'Pay with M-Pesa'];
+export const BUNDLE_PERKS = ['Unlimited data — no caps', 'Pay with M-Pesa', 'No app, no sign-up'];
 
 /* ------------------------------------------------------------------ */
 /* Where to find us                                                    */
 /* ------------------------------------------------------------------ */
 
 export const SPOT_AREAS = [
-  { name: 'Nairobi CBD', status: 'live' as const },
-  { name: 'Kahawa', status: 'live' as const },
-  { name: 'Ruiru', status: 'live' as const },
-  { name: 'Juja', status: 'live' as const },
-  { name: 'Thika', status: 'live' as const },
-  { name: 'Kiambu', status: 'live' as const },
-  { name: 'Syokimau', status: 'soon' as const },
-  { name: 'Kitengela', status: 'soon' as const },
+  { name: 'Rongai', status: 'live' as const },
+  { name: 'Banana', status: 'live' as const },
+  { name: 'Kiserian', status: 'live' as const },
 ];
 
 export const VENUE_TYPES = [
-  { title: 'Estates & apartments', body: 'Courtyards, blocks and gated communities.' },
+  { title: 'Apartments & rentals', body: 'WiFi for tenants in blocks and rental homes.' },
   { title: 'Cafés & kibandas', body: 'Grab a chai, grab a bundle.' },
   { title: 'Bus & matatu stages', body: 'Waiting time becomes online time.' },
-  { title: 'Campuses & hostels', body: 'Student hostels around Juja and Kahawa.' },
+  { title: 'Hostels', body: 'Affordable WiFi for students and young workers.' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -136,26 +130,22 @@ export const VENUE_TYPES = [
 export const FAQS = [
   {
     q: 'How do I connect?',
-    a: 'Turn on WiFi and join the network called "DICE Hotspot". A page opens automatically — pick a bundle, pay with M-Pesa, and you are online. If the page does not open, visit any website and it will appear.',
+    a: 'Turn on WiFi and join "DICE WIFI". The sign-in page opens by itself — tap your package, enter your phone number and tap PAY NOW. If the page does not open, visit any website and it will appear.',
   },
   {
     q: 'How do I pay?',
-    a: 'Enter your M-Pesa number on the portal and confirm the STK push on your phone. Your access code also arrives by SMS so you can reconnect later or use it on another device.',
+    a: 'With M-Pesa. After you tap PAY NOW, an M-Pesa prompt pops up on your phone — enter your PIN and wait about 30 seconds while the payment is confirmed. You are then online.',
   },
   {
     q: 'Is the data really unlimited?',
-    a: 'Yes. Every bundle is time-based, not data-based — stream, download and video-call as much as you like until your time runs out.',
+    a: 'Yes. Every package is time-based, not data-based — stream, download and video-call as much as you like until your time runs out.',
   },
   {
-    q: 'Can I use one bundle on two devices?',
-    a: 'Weekly bundles cover 2 devices and Monthly bundles cover 3. Hourly and Daily bundles are for one device at a time.',
-  },
-  {
-    q: 'What happens if I move to another DICE spot?',
-    a: 'Your bundle follows you. Join "DICE Hotspot" at any of our locations and you are reconnected automatically for as long as your time lasts.',
+    q: 'Where is DICE WIFI available?',
+    a: 'In Rongai, Banana and Kiserian — at apartments and rentals, cafés and kibandas, bus and matatu stages, and hostels. Look for "DICE WIFI" in your WiFi list.',
   },
   {
     q: 'I paid but I am not connected. What now?',
-    a: 'Reconnect to the WiFi and enter the code from your SMS. Still stuck? WhatsApp us your M-Pesa confirmation code and we will sort it out within minutes.',
+    a: 'Open the sign-in page and use "Reconnect account" — enter the M-Pesa code from your payment SMS (e.g. QAH9QWWZRR). Still stuck? Call or WhatsApp customer care on 0769 051 010.',
   },
 ];

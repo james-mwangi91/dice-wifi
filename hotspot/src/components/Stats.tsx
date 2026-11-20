@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { useInView, useReducedMotion } from 'framer-motion';
-import { Clock, Headphones, MapPin, Smartphone } from 'lucide-react';
+import { Clock, Layers, MapPin, Timer } from 'lucide-react';
 import { BUNDLES, SPOT_AREAS } from '../data';
 
 /* Facts about the service itself — no invented customer numbers */
 const STATS = [
   { value: Math.min(...BUNDLES.map((b) => b.price)), prefix: 'KES ', suffix: '', label: 'Cheapest bundle', icon: Clock },
   { value: SPOT_AREAS.filter((a) => a.status === 'live').length, prefix: '', suffix: '', label: 'Areas live now', icon: MapPin },
-  { value: Math.max(...BUNDLES.map((b) => b.devices)), prefix: '', suffix: '', label: 'Devices on one bundle', icon: Smartphone },
-  { value: 24, prefix: '', suffix: '/7', label: 'WhatsApp support', icon: Headphones },
+  { value: BUNDLES.length, prefix: '', suffix: '', label: 'Packages to choose from', icon: Layers },
+  { value: 30, prefix: '', suffix: ' sec', label: 'To pay and get online', icon: Timer },
 ];
 
 function Count({ to, prefix, suffix }: { to: number; prefix: string; suffix: string }) {
@@ -46,7 +46,7 @@ function Count({ to, prefix, suffix }: { to: number; prefix: string; suffix: str
 /** Row of four stat cards with red icon badges (theme pattern) */
 export default function Stats() {
   return (
-    <section aria-label="DICE Hotspot at a glance" className="bg-surface py-16">
+    <section aria-label="DICE WIFI at a glance" className="bg-surface py-16">
       <div className="container-x grid grid-cols-2 gap-4 lg:grid-cols-4">
         {STATS.map((s) => (
           <div
