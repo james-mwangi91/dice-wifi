@@ -61,7 +61,7 @@ export default function Navbar() {
                 <a
                   href={l.href}
                   className={
-                    'relative px-3.5 py-2 font-display text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:text-white dark:text-night/80 dark:hover:text-coral ' +
+                    'relative px-3.5 py-2 font-display text-sm font-semibold uppercase tracking-wide text-white/85 transition-colors hover:text-white dark:text-night/80 dark:hover:text-accent ' +
                     "after:absolute after:inset-x-3.5 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-coral after:transition-transform after:content-[''] hover:after:scale-x-100"
                   }
                 >

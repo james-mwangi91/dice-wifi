@@ -20,6 +20,8 @@ export default {
           100: 'rgb(var(--coral-100) / <alpha-value>)',
         },
         sun: { DEFAULT: 'rgb(var(--sun) / <alpha-value>)', 100: 'rgb(var(--sun-100) / <alpha-value>)' },
+        /* Accent for TEXT: #92000A on light surfaces, a brighter crimson on dark ones so it stays readable */
+        accent: 'rgb(var(--accent-text) / <alpha-value>)',
         cream: '#F4F6FB',
         /* Theme-aware tokens (see index.css): flip between light and dark */
         surface: 'rgb(var(--surface) / <alpha-value>)',

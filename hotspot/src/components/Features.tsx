@@ -27,7 +27,7 @@ export default function Features() {
               <h3 className="font-display text-lg font-semibold">{f.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/70">{f.body}</p>
             </div>
-            <span className="inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white text-coral ring-4 ring-coral/40 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
+            <span className="inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-white text-accent ring-4 ring-coral/40 transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
               <f.icon className="h-7 w-7" />
             </span>
           </motion.article>

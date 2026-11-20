@@ -55,7 +55,7 @@ export default function Bundles() {
                     <span
                       className={
                         'inline-flex h-20 w-20 flex-col items-center justify-center rounded-full bg-card font-display ring-4 ' +
-                        (hot ? 'text-coral ring-coral' : 'text-night ring-night dark:text-white dark:ring-white/70')
+                        (hot ? 'text-accent ring-coral' : 'text-night ring-night dark:text-white dark:ring-white/70')
                       }
                     >
                       <span className="text-lg font-bold leading-none">{shortDuration(b.duration).split(' ')[0]}</span>
@@ -73,7 +73,7 @@ export default function Bundles() {
                     <ul className="mt-6 flex-1 space-y-2.5 text-left text-sm">
                       {[b.duration + ' of access', 'Unlimited data', `${b.devices} device${b.devices > 1 ? 's' : ''}`, 'Pay with M-Pesa'].map((f) => (
                         <li key={f} className="flex items-center gap-2.5 text-ink/75">
-                          <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-coral/10 text-coral">
+                          <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-coral/10 text-accent">
                             <Check className="h-3 w-3" strokeWidth={3} />
                           </span>
                           {f}
@@ -98,7 +98,7 @@ export default function Bundles() {
 
         <p className="mt-10 text-center text-sm text-ink/60">
           Need WiFi for a whole building or event?{' '}
-          <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="font-semibold text-coral underline underline-offset-4">
+          <a href={BRAND.whatsappHref} target="_blank" rel="noreferrer" className="font-semibold text-accent underline underline-offset-4">
             Ask us for a custom plan
           </a>
           .

@@ -54,7 +54,7 @@ export default function Stats() {
             className="flex items-center justify-between gap-4 rounded-lg bg-card p-5 shadow-[0_14px_34px_-24px_rgba(14,27,77,0.5)] ring-1 ring-ink/5 sm:p-6"
           >
             <div>
-              <p className="font-display text-2xl font-bold text-coral sm:text-3xl">
+              <p className="font-display text-2xl font-bold text-accent sm:text-3xl">
                 <Count to={s.value} prefix={s.prefix} suffix={s.suffix} />
               </p>
               <p className="mt-1 text-xs font-medium text-ink/60 sm:text-sm">{s.label}</p>

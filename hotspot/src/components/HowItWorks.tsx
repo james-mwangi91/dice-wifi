@@ -28,9 +28,9 @@ function PhoneScreen({ step }: { step: number }) {
             <div className="mt-5 rounded-2xl bg-white p-1.5 shadow-sm">
               <div className="flex items-center justify-between rounded-xl bg-coral-100 px-3 py-3">
                 <span className="flex items-center gap-2 font-semibold text-night">
-                  <Wifi className="h-4 w-4 text-coral" /> {BRAND.ssid}
+                  <Wifi className="h-4 w-4 text-accent" /> {BRAND.ssid}
                 </span>
-                <span className="text-[11px] font-bold text-coral">Tap to join</span>
+                <span className="text-[11px] font-bold text-accent">Tap to join</span>
               </div>
               {['Home_5G', 'Office-Guest', 'TECNO SPARK'].map((n) => (
                 <div key={n} className="flex items-center justify-between px-3 py-3 text-sm text-night/60">
@@ -46,7 +46,7 @@ function PhoneScreen({ step }: { step: number }) {
 
         {step === 1 && (
           <>
-            <p className="text-center font-display text-sm font-black text-coral">DICE Hotspot</p>
+            <p className="text-center font-display text-sm font-black text-accent">DICE Hotspot</p>
             <p className="mt-1 text-center font-display text-lg font-black">Choose your bundle</p>
             <div className="mt-4 space-y-2">
               {BUNDLES.slice(0, 4).map((b) => (

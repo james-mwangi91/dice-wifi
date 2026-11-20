@@ -27,7 +27,7 @@ export default function DealsStrip() {
             Your estate or town
           </label>
           <div className="flex flex-1 items-center rounded-md bg-white px-4 text-night">
-            <MapPin className="h-5 w-5 text-coral" />
+            <MapPin className="h-5 w-5 text-accent" />
             <input
               id="deal-area"
               value={q}
