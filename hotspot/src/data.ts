@@ -97,11 +97,11 @@ export interface Bundle {
 
 /* The packages sold on the DICE WIFI portal */
 export const BUNDLES: Bundle[] = [
-  { id: '1h', name: '1 Hour', swahili: 'Saa moja', duration: '1 hour', price: 10, blurb: 'Check messages, send that CV, top up your playlist.' },
-  { id: '3h', name: '3 Hours', swahili: 'Masaa matatu', duration: '3 hours', price: 15, blurb: 'A movie, a match, or an afternoon of assignments.' },
-  { id: '5h', name: '5 Hours', swahili: 'Masaa matano', duration: '5 hours', price: 20, blurb: 'A full evening of streaming and gaming.' },
-  { id: '24h', name: '24 Hours', swahili: 'Siku nzima', duration: '24 hours', price: 50, blurb: 'All day and all night online.', popular: true },
-  { id: '7d', name: 'Weekly', swahili: 'Wiki nzima', duration: '7 days', price: 250, blurb: 'A whole week online, from Monday to Monday.' },
+  { id: '1h', name: 'Sharp Sharp', swahili: 'Saa moja', duration: '1 hour', price: 10, blurb: 'Check messages, send that CV, top up your playlist.' },
+  { id: '3h', name: 'Chill Session', swahili: 'Masaa matatu', duration: '3 hours', price: 15, blurb: 'A movie, a match, or an afternoon of assignments.' },
+  { id: '5h', name: 'Binge Mode', swahili: 'Masaa matano', duration: '5 hours', price: 20, blurb: 'A full evening of streaming and gaming.', popular: true },
+  { id: '24h', name: 'All-Day Pass', swahili: 'Siku nzima', duration: '24 hours', price: 50, blurb: 'All day and all night online.' },
+  { id: '7d', name: 'Weekly Boss', swahili: 'Wiki nzima', duration: '7 days', price: 250, blurb: 'A whole week online, from Monday to Monday.' },
 ];
 
 export const BUNDLE_PERKS = ['Unlimited data — no caps', 'Pay with M-Pesa', 'No app, no sign-up'];

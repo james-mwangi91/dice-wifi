@@ -96,7 +96,7 @@ export default function Hero() {
   const [hovering, setHovering] = useState(false);
   const playing = !hovering && !reduced;
   const slide = SLIDES[index];
-  const quick = BUNDLES.filter((b) => ['1h', '24h', '7d'].includes(b.id));
+  const quick = BUNDLES.filter((b) => ['1h', '5h', '7d'].includes(b.id));
 
   const go = useCallback((n: number) => setIndex((n + SLIDES.length) % SLIDES.length), []);
 
@@ -217,8 +217,8 @@ export default function Hero() {
               <p className="flex items-center gap-2.5">
                 <CheckCircle2 className="h-6 w-6 text-accent" />
                 <span>
-                  <span className="block font-display text-lg font-black leading-none text-ink">KES 50</span>
-                  <span className="text-xs text-ink/60">24 hrs · paid via M-Pesa</span>
+                  <span className="block font-display text-lg font-black leading-none text-ink">KES 20</span>
+                  <span className="text-xs text-ink/60">5 hrs Binge Mode · M-Pesa</span>
                 </span>
               </p>
             </FloatBadge>
